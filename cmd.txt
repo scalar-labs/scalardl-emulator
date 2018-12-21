@@ -1,0 +1,4 @@
+put foo {"bar":"foobar"}
+get foo
+put foo {"bar":"foobar f"}
+scan foo
