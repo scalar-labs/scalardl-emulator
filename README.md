@@ -17,7 +17,7 @@ To run the emulator
 ```
 
 or pass a file containing a list of commands the tool will execute. For example,
-this will run commands contained in [cmds.txt](https://github.com/scalar-labs/scalardl-emulator/blob/master/cmd.txt)
+this will run commands contained in [cmds.txt](https://github.com/scalar-labs/scalardl-emulator/blob/master/cmds.txt)
 ```
 ./build/install/emulator/bin/emulator -f cmds.txt
 ```
