@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = "list-contract",
+    name = "list-contracts",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -19,10 +19,10 @@ import picocli.CommandLine;
     description = "List the registered contracts",
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n")
-public class ListContract extends AbstractCommand {
+public class ListContracts extends AbstractCommand {
 
   @Inject
-  public ListContract(
+  public ListContracts(
       TerminalWrapper terminal,
       ContractRegistry contractRegistry,
       TransactionalAssetbase assetbase,

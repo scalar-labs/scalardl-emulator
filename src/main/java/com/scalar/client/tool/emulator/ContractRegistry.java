@@ -18,9 +18,16 @@ public class ContractRegistry {
     contracts = new HashMap<>();
     properties = new HashMap<>();
 
+    preregisterContracts();
+  }
+
+  private void preregisterContracts() {
     this.putContract("get", new GetContract());
     this.putContract("put", new PutContract());
     this.putContract("scan", new ScanContract());
+
+    // User preregistered contracts may be inserted below
+    // this.putContract("some_id", new SomeContract());
   }
 
   public void putContract(String id, Contract contract) {

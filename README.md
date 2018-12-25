@@ -1,26 +1,29 @@
 # ScalarDL emulator
 
-This tools offers an interactive command line interface to run Scalar DL Contract implementation on an in memory ledger.
+This tools offers an interactive command line interface to run Scalar DL Contract implementation on an in-memory ledger.
 
-### Generate the executables
+## Generate the executables
+
 ```
 ./gradlew build install
 ```
 The executable is found in `build/install/emulator/bin`.
 
-### Run
+## Run
 
 To run the emulator
 ```
 ./build/install/emulator/bin/emulator
 ```
 
-or pass a file containing a list of commands the tool will execute.
-This will run commands contained into the [end 2 end test scenario](./src/test/resources/end_2_end_test) 
+or pass a file containing a list of commands the tool will execute. For example,
+this will run commands contained in [cmds.txt](cmds.txt)
 ```
-./build/install/emulator/bin/emulator -f src/test/resources/end_2_end_test
+./build/install/emulator/bin/emulator -f cmds.txt
 ```
-#### Exit/Suspend the terminal
+
+### Exit/Suspend the terminal
+
 The tool can be exited with the standard shortcut to kill a job or by executing the `exit` command.
 
 The terminal can also be paused with Ctrl+Z
@@ -33,13 +36,13 @@ To show the tool help
 
 Every command has a detailed help that can be displayed with -h. For example:
 ```
-dlt-e# execute -h
+scalar> execute -h
 
 Usage:
 execute [-h] id argument...
 
 Description:
-Execute a contract that has been with the `register` command.
+Execute a contract that has been registered with the `register` command.
 
 Parameters:
       id            contract id. Use `list-contract` to list registered contract id.
@@ -51,11 +54,11 @@ Options:
 For example : `execute get {"asset_id": "X"}`
 ```
 
-### Available commands in the interactive terminal
+## Available commands in the interactive terminal
 
 To display the list of available commands inside the interactive terminal. Type `usage`
 ```
-dlt-e# usage
+scalar> usage
 Available commands :
 	- execute
 	- get
@@ -68,3 +71,8 @@ Available commands :
 	- scan -j
 Type "<command> -h" to display the command usage.
 ```
+
+## Registering a contract
+
+Write a contract and save it in the `contract` directory. You then have two ways to `register` the contract.
+You can register your contract directly in `ContractRegistry.java` by adding a line to the `preregisterContracts()` method, or use the `register` command.

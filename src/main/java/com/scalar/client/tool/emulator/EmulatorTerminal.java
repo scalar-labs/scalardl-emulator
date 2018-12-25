@@ -7,7 +7,7 @@ import com.scalar.client.tool.emulator.command.CommandExceptionHandler;
 import com.scalar.client.tool.emulator.command.Execute;
 import com.scalar.client.tool.emulator.command.Get;
 import com.scalar.client.tool.emulator.command.GetWithSingleParameter;
-import com.scalar.client.tool.emulator.command.ListContract;
+import com.scalar.client.tool.emulator.command.ListContracts;
 import com.scalar.client.tool.emulator.command.Put;
 import com.scalar.client.tool.emulator.command.PutWithSingleParameter;
 import com.scalar.client.tool.emulator.command.Register;
@@ -32,9 +32,7 @@ import picocli.CommandLine;
     descriptionHeading = "%n@|bold,underline Description|@:%n",
     description = "Interactive emulator for Scalar DL",
     parameterListHeading = "%n@|bold,underline Parameters|@:%n",
-    optionListHeading = "%n@|bold,underline Options|@:%n",
-    footerHeading = "%n",
-    footer = "%n")
+    optionListHeading = "%n@|bold,underline Options|@:%n")
 public class EmulatorTerminal implements Runnable {
   private static List<CommandLine> commands;
   private TerminalWrapper terminal;
@@ -47,6 +45,12 @@ public class EmulatorTerminal implements Runnable {
       description =
           "a file containing a list of commands that will be executed. The file should contain one command at most per line")
   private File commandsFile;
+
+  @CommandLine.Option(
+      names = {"-h", "--help"},
+      description = "print the help and exit",
+      usageHelp = true)
+  private boolean help;
 
   @Inject
   public EmulatorTerminal(TerminalWrapper terminal, ContractRegistry contractRegistry) {
@@ -62,14 +66,14 @@ public class EmulatorTerminal implements Runnable {
             new CommandLine(injector.getInstance(Execute.class)),
             new CommandLine(injector.getInstance(Get.class)),
             new CommandLine(injector.getInstance(GetWithSingleParameter.class)),
-            new CommandLine(injector.getInstance(ListContract.class)),
+            new CommandLine(injector.getInstance(ListContracts.class)),
             new CommandLine(injector.getInstance(Put.class)),
             new CommandLine(injector.getInstance(PutWithSingleParameter.class)),
             new CommandLine(injector.getInstance(Register.class)),
             new CommandLine(injector.getInstance(Scan.class)),
             new CommandLine(injector.getInstance(ScanWithSingleParameter.class)));
 
-    CommandLine.run(injector.getInstance(EmulatorTerminal.class));
+    CommandLine.run(injector.getInstance(EmulatorTerminal.class), args);
   }
 
   @Override
@@ -96,7 +100,6 @@ public class EmulatorTerminal implements Runnable {
         break;
       }
     }
-    terminal.println("bye for now!");
   }
 
   private void executeCommandsFile() {

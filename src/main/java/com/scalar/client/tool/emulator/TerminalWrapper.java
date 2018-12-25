@@ -17,7 +17,7 @@ import picocli.CommandLine;
 @Immutable
 public final class TerminalWrapper {
   public static final int USAGE_HELP_WIDTH = 150;
-  public static final String LINE_HEADER = "dlt-e# ";
+  public static final String LINE_HEADER = "scalar> ";
   private final Terminal terminal;
 
   public TerminalWrapper(Terminal terminal) {
