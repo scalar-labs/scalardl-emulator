@@ -1,4 +1,3 @@
-
 list-contracts
 execute put {"asset_id": "X", "data": {"alice": 100, "bob": 0}}
 execute put {"asset_id": "X", "data": {"alice": 70, "bob": 30}}
