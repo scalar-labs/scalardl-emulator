@@ -26,39 +26,12 @@ this will run commands contained in [cmds.txt](cmds.txt)
 
 The tool can be exited with the standard shortcut to kill a job or by executing the `exit` command.
 
-The terminal can also be paused with Ctrl+Z
+## Help
 
-#### Show the help
-To show the tool help
+Type `help` to display the list of available commands inside the interactive terminal.
+
 ```
-./build/install/emulator/bin/emulator -h
-```
-
-Every command has a detailed help that can be displayed with -h. For example:
-```
-scalar> execute -h
-
-Usage:
-execute [-h] id argument...
-
-Description:
-Execute a contract that has been registered with the `register` command.
-
-Parameters:
-      id            contract id. Use `list-contract` to list registered contract id.
-      argument...   the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object
-
-Options:
-  -h, --help        print the help and exit
-
-For example : `execute get {"asset_id": "X"}`
-```
-
-## Available commands in the interactive terminal
-
-To display the list of available commands inside the interactive terminal. Type `usage`
-```
-scalar> usage
+scalar> help
 Available commands :
 	- execute
 	- get
@@ -72,7 +45,32 @@ Available commands :
 Type "<command> -h" to display the command usage.
 ```
 
+Every command has a detailed help that can be displayed with -h. For example:
+
+```
+scalar> execute -h
+
+Usage:
+execute [-h] id argument...
+
+Description:
+Execute a contract that has been with the 'register' command.
+
+Parameters:
+      id            contract id. Use 'list-contract' to list registered contract id.
+      argument...   the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object
+
+Options:
+  -h, --help        print the help and exit
+
+For example: 'execute get {"asset_id":"foo"}'
+```
+
 ## Registering a contract
 
 Write a contract and save it in the `contract` directory. You then have two ways to `register` the contract.
-You can register your contract directly in `ContractRegistry.java` by adding a line to the `preregisterContracts()` method, or use the `register` command.
+You can register your contract directly in `ContractRegistry.java` by adding a line to the `preregisterContracts()` method, or use the `register` command as in
+
+```
+register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class
+```
