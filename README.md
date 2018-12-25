@@ -32,17 +32,19 @@ Type `help` to display the list of available commands inside the interactive ter
 
 ```
 scalar> help
-Available commands :
-	- execute
-	- get
-	- get -j
-	- list-contract
-	- put
-	- put -j
-	- register
-	- scan
-	- scan -j
-Type "<command> -h" to display the command usage.
+Available commands:
+ - execute
+ - get
+ - get -j
+ - list-contracts
+ - put
+ - put -j
+ - register
+ - scan
+ - scan -j
+ - help
+ - exit
+Type '<command> -h' to display the command help.
 ```
 
 Every command has a detailed help that can be displayed with -h. For example:

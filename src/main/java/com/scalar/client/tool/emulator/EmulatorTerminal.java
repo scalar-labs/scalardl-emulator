@@ -118,7 +118,7 @@ public class EmulatorTerminal implements Runnable {
   private boolean processLine(String line) {
     line = line.trim();
     if (line.equals("help")) {
-      printUsage();
+      printHelp();
       return true;
     } else if (line.equals("exit")) {
       shouldExit = true;
@@ -128,14 +128,16 @@ public class EmulatorTerminal implements Runnable {
     }
   }
 
-  private void printUsage() {
-    terminal.println("Available commands :");
+  private void printHelp() {
+    terminal.println("Available commands:");
     commands
         .stream()
         .map(CommandLine::getCommandName)
         .sorted(String::compareToIgnoreCase)
-        .forEach(commandName -> terminal.println("\t- " + commandName));
-    terminal.println("Type '<command> -h' to display the command usage.");
+        .forEach(commandName -> terminal.println(" - " + commandName));
+    terminal.println(" - help");
+    terminal.println(" - exit");
+    terminal.println("Type '<command> -h' to display the command help.");
   }
 
   private boolean parseAndRunCommand(String line) {
