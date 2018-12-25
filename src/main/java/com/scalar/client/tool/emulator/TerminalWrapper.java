@@ -41,11 +41,8 @@ public final class TerminalWrapper {
   }
 
   public void printWelcomeMessage() {
-    println("-------------------------------------------------------", true);
-    println("Welcome to the Scalar DLT emulator interactive ", true);
-    println("-------------------------------------------------------", true);
-    println("Type 'usage' for more information", true);
-    println("");
+    println("Scalar DLT emulator 0.1");
+    println("Type 'help' for more information");
   }
 
   public void resume() {
@@ -55,7 +52,7 @@ public final class TerminalWrapper {
   public LineReader setUpAutoCompletionAndTerminalHistory(List<CommandLine> commands) {
     List<String> commandsName =
         commands.stream().map(e -> e.getCommandName()).collect(Collectors.toList());
-    commandsName.add("usage");
+    commandsName.add("help");
     commandsName.add("exit");
 
     AggregateCompleter completer =

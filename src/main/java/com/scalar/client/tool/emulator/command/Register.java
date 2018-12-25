@@ -24,7 +24,7 @@ import picocli.CommandLine;
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n",
     footer =
-        "For example: 'register ./Get.class com.scalar.client.tool.emulator.contract.Get get'%n")
+        "For example: 'register get com.scalar.client.tool.emulator.contract.GetContract ./build/classes/java/main/com/scalar/client/tool/emulator/contract/GetContract.class'%n")
 public class Register extends AbstractCommand implements Runnable {
   @CommandLine.Parameters(
       index = "0",

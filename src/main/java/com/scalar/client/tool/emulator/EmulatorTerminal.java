@@ -64,14 +64,14 @@ public class EmulatorTerminal implements Runnable {
     commands =
         Arrays.asList(
             new CommandLine(injector.getInstance(Execute.class)),
-            new CommandLine(injector.getInstance(Get.class)),
             new CommandLine(injector.getInstance(GetWithSingleParameter.class)),
+            new CommandLine(injector.getInstance(Get.class)),
             new CommandLine(injector.getInstance(ListContracts.class)),
-            new CommandLine(injector.getInstance(Put.class)),
             new CommandLine(injector.getInstance(PutWithSingleParameter.class)),
+            new CommandLine(injector.getInstance(Put.class)),
             new CommandLine(injector.getInstance(Register.class)),
-            new CommandLine(injector.getInstance(Scan.class)),
-            new CommandLine(injector.getInstance(ScanWithSingleParameter.class)));
+            new CommandLine(injector.getInstance(ScanWithSingleParameter.class)),
+            new CommandLine(injector.getInstance(Scan.class)));
 
     CommandLine.run(injector.getInstance(EmulatorTerminal.class), args);
   }
@@ -79,10 +79,11 @@ public class EmulatorTerminal implements Runnable {
   @Override
   public void run() {
     LineReader inputReader = terminal.setUpAutoCompletionAndTerminalHistory(commands);
-    terminal.printWelcomeMessage();
 
     if (commandsFile != null) {
       executeCommandsFile();
+    } else {
+      terminal.printWelcomeMessage();
     }
 
     terminal.resume();
@@ -116,7 +117,7 @@ public class EmulatorTerminal implements Runnable {
 
   private boolean processLine(String line) {
     line = line.trim();
-    if (line.equals("usage")) {
+    if (line.equals("help")) {
       printUsage();
       return true;
     } else if (line.equals("exit")) {
