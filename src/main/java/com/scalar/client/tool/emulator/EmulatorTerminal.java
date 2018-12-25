@@ -137,7 +137,7 @@ public class EmulatorTerminal implements Runnable {
         .forEach(commandName -> terminal.println(" - " + commandName));
     terminal.println(" - help");
     terminal.println(" - exit");
-    terminal.println("Type '<command> -h' to display the command help.");
+    terminal.println("Type '<command> -h' to display help for the command.");
   }
 
   private boolean parseAndRunCommand(String line) {

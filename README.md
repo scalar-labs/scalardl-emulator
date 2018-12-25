@@ -44,7 +44,7 @@ Available commands:
  - scan -j
  - help
  - exit
-Type '<command> -h' to display the command help.
+Type '<command> -h' to display help for the command.
 ```
 
 Every command has a detailed help that can be displayed with -h. For example:
@@ -56,10 +56,10 @@ Usage:
 execute [-h] id argument...
 
 Description:
-Execute a contract that has been with the 'register' command.
+Execute a registered contract.
 
 Parameters:
-      id            contract id. Use 'list-contract' to list registered contract id.
+      id            contract id. Use 'list-contracts' to list all the registered contracts and their ids.
       argument...   the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object
 
 Options:

@@ -16,7 +16,7 @@ import picocli.CommandLine;
     headerHeading = "%n@|bold,underline Usage|@:%n",
     synopsisHeading = "",
     descriptionHeading = "%n@|bold,underline Description|@:%n",
-    description = "Execute a contract that has been with the 'register' command.",
+    description = "Execute a registered contract.",
     parameterListHeading = "%n@|bold,underline Parameters|@:%n",
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n",
@@ -25,7 +25,7 @@ public class Execute extends AbstractCommand {
   @CommandLine.Parameters(
       index = "0",
       paramLabel = "id",
-      description = "contract id. Use 'list-contract' to list registered contract id.")
+      description = "contract id. Use 'list-contracts' to list all the registered contracts and their ids.")
   private String id;
 
   @CommandLine.Parameters(
