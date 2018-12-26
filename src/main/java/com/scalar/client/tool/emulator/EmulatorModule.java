@@ -3,8 +3,11 @@ package com.scalar.client.tool.emulator;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.scalar.ledger.contract.ContractManager;
+import com.scalar.ledger.database.SignedContractRegistry;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
+import com.scalar.ledger.exception.RegistryIOException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.IOException;
@@ -13,9 +16,13 @@ import org.jline.terminal.TerminalBuilder;
 
 public class EmulatorModule extends AbstractModule {
   private final AssetbaseEmulator assetbase;
+  private final SignedContractRegistry registry;
+  private final ContractManager manager;
 
-  public EmulatorModule() throws IOException {
+  public EmulatorModule() {
     assetbase = new AssetbaseEmulator();
+    registry = new ContractRegistryEmulator();
+    manager = new ContractManager(registry);
   }
 
   @Provides
@@ -27,14 +34,26 @@ public class EmulatorModule extends AbstractModule {
 
   @Provides
   @Singleton
-  ContractRegistry provideRegistry() {
-    return new ContractRegistry();
+  TransactionalAssetbase provideAssetbase() {
+    return assetbase;
   }
 
   @Provides
   @Singleton
-  TransactionalAssetbase provideAssetbase() {
-    return assetbase;
+  SignedContractRegistry provideSignedContractRegistry() {
+    return registry;
+  }
+
+  @Provides
+  @Singleton
+  ContractManager provideContractManager() {
+    return manager;
+  }
+
+  @Provides
+  @Singleton
+  ContractManagerWrapper provideContractManagerWrapper() throws RegistryIOException {
+    return new ContractManagerWrapper(manager);
   }
 
   @Provides

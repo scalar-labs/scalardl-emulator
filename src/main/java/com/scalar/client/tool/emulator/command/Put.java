@@ -1,7 +1,7 @@
 package com.scalar.client.tool.emulator.command;
 
 import com.google.gson.JsonObject;
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
@@ -42,10 +42,10 @@ public class Put extends AbstractCommand {
   @Inject
   public Put(
       TerminalWrapper terminal,
-      ContractRegistry contractRegistry,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, contractRegistry, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override

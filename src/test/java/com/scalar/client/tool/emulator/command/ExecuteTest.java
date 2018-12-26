@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.EmulatorModule;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.exception.LedgerException;
@@ -28,7 +28,7 @@ public class ExecuteTest {
   private JsonObject argument;
   Injector injector;
   Execute execute;
-  ContractRegistry contractRegistry;
+  ContractManagerWrapper contractManager;
 
   @Before
   public void setUp() throws LedgerException, IOException {
@@ -36,8 +36,8 @@ public class ExecuteTest {
     injector = Guice.createInjector(new EmulatorModule());
     execute = injector.getInstance(Execute.class);
     ledger = injector.getInstance(Ledger.class);
-    contractRegistry = injector.getInstance(ContractRegistry.class);
-    contractRegistry.putContract(CONTRACT_ID, contract);
+    contractManager = injector.getInstance(ContractManagerWrapper.class);
+    // contractManager.register(CONTRACT_ID, contract);
 
     argument = new JsonObject();
     argument.addProperty("x", "y");

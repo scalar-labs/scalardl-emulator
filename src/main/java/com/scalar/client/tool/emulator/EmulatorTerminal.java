@@ -36,7 +36,6 @@ import picocli.CommandLine;
 public class EmulatorTerminal implements Runnable {
   private static List<CommandLine> commands;
   private TerminalWrapper terminal;
-  private ContractRegistry contractRegistry;
   private boolean shouldExit;
 
   @CommandLine.Option(
@@ -53,12 +52,11 @@ public class EmulatorTerminal implements Runnable {
   private boolean help;
 
   @Inject
-  public EmulatorTerminal(TerminalWrapper terminal, ContractRegistry contractRegistry) {
+  public EmulatorTerminal(TerminalWrapper terminal) {
     this.terminal = terminal;
-    this.contractRegistry = contractRegistry;
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     Injector injector = Guice.createInjector(new EmulatorModule());
 
     commands =

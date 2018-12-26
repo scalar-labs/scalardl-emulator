@@ -1,11 +1,11 @@
 package com.scalar.client.tool.emulator.command;
 
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
-import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.TransactionalAssetbase;
+import com.scalar.ledger.exception.RegistryIOException;
 import com.scalar.ledger.ledger.Ledger;
-import java.util.Map;
+import java.util.List;
 import javax.inject.Inject;
 import picocli.CommandLine;
 
@@ -24,26 +24,29 @@ public class ListContracts extends AbstractCommand {
   @Inject
   public ListContracts(
       TerminalWrapper terminal,
-      ContractRegistry contractRegistry,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, contractRegistry, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override
   public void run() {
-    Map<String, Contract> contracts = contractRegistry.getContracts();
+    List<String> contracts = contractManager.getContractIds();
     if (contracts.isEmpty()) {
       terminal.println("No registered contracts");
     }
-    for (Map.Entry<String, Contract> entry : contracts.entrySet()) {
-      String id = entry.getKey();
-      Contract contract = entry.getValue();
-      String property =
-          contractRegistry.getProperty(id).isPresent()
-              ? ", property: " + contractRegistry.getProperty(id).get()
-              : "";
-      terminal.println("id: " + id + ", class name: " + contract.getClass().getName() + property);
+    for (String id : contracts) {
+      String properties = null;
+      try {
+        properties =
+            contractManager.getProperties(id).isPresent()
+                ? ", properties: " + contractManager.getProperties(id).get()
+                : "";
+      } catch (RegistryIOException e) {
+        // ignore it
+      }
+      terminal.println("id: " + id + properties);
     }
   }
 }

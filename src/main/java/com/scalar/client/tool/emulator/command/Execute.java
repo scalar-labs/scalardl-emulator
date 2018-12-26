@@ -1,7 +1,7 @@
 package com.scalar.client.tool.emulator.command;
 
 import com.google.gson.JsonObject;
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
@@ -25,7 +25,8 @@ public class Execute extends AbstractCommand {
   @CommandLine.Parameters(
       index = "0",
       paramLabel = "id",
-      description = "contract id. Use 'list-contracts' to list all the registered contracts and their ids.")
+      description =
+          "contract id. Use 'list-contracts' to list all the registered contracts and their ids.")
   private String id;
 
   @CommandLine.Parameters(
@@ -39,10 +40,10 @@ public class Execute extends AbstractCommand {
   @Inject
   public Execute(
       TerminalWrapper terminal,
-      ContractRegistry contractRegistry,
+      ContractManagerWrapper registry,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, contractRegistry, assetbase, ledger);
+    super(terminal, registry, assetbase, ledger);
   }
 
   @Override

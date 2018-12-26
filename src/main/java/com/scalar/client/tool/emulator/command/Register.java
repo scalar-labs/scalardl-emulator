@@ -1,11 +1,15 @@
 package com.scalar.client.tool.emulator.command;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.google.gson.JsonObject;
-import com.scalar.client.tool.emulator.ContractClassLoader;
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
-import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.TransactionalAssetbase;
+import com.scalar.ledger.exception.ContractValidationException;
+import com.scalar.ledger.exception.RegistryException;
+import com.scalar.ledger.exception.SignatureException;
+import com.scalar.ledger.exception.UnloadableKeyException;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.util.List;
@@ -44,49 +48,41 @@ public class Register extends AbstractCommand implements Runnable {
       paramLabel = "file",
       description =
           "compiled contract class file, e.g. 'build/java/main/com/scalar/client/tool/emulator/contract/Get.class'")
-  private File file;
+  private File contractFile;
 
   @CommandLine.Parameters(
       index = "3..*",
       paramLabel = "contract_property",
       description =
           "the JSON contract property. A plain text JSON object or the path to a file containing a JSON object. For example: {\"x\": \"y\"}")
-  private List<String> contractProperty;
+  private List<String> contractProperties;
 
   @Inject
   public Register(
       TerminalWrapper terminal,
-      ContractRegistry contractRegistry,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, contractRegistry, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override
   public void run() {
-    if (contractRegistry.getContract(id).isPresent()) {
-      terminal.println("Error: contract '" + id + "' has already been registered");
-      return;
-    }
+    checkArgument(id != null, "id cannot be null");
+    checkArgument(name != null, "name cannot be null");
+    checkArgument(contractFile != null, "contractFile cannot be null");
 
     try {
-      ContractClassLoader loader =
-          new ContractClassLoader(terminal.getTerminal().writer(), this.name);
-      Class<?> loadedClass = loader.load(this.file, this.name);
-      // Test if the loaded class extends from Contract
-      if (Contract.class.isAssignableFrom(loadedClass)) {
-        Contract contract = (Contract) loadedClass.getConstructor().newInstance();
-        contractRegistry.putContract(id, contract);
-      } else {
-        terminal.println("Error: the loaded class does not inherit from Contract class");
-        return;
+      JsonObject properties = null;
+      if (contractProperties != null) {
+        properties = convertJsonParameter(contractProperties);
       }
-      if (contractProperty != null) {
-        JsonObject property = convertJsonParameter(contractProperty);
-        contractRegistry.putProperty(id, property);
-      }
+      contractManager.register(id, name, contractFile, properties);
       terminal.println("Registration success");
-    } catch (Exception e) {
+    } catch (UnloadableKeyException
+        | SignatureException
+        | RegistryException
+        | ContractValidationException e) {
       terminal.println("Contract registration error: " + e.getMessage());
       terminal.println("Failed to register " + name + " -> " + id);
     }
