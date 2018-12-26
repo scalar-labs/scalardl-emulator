@@ -70,8 +70,7 @@ For example: 'execute get {"asset_id":"foo"}'
 
 ## Registering a contract
 
-Write a contract and save it in the `contract` directory. You then have two ways to `register` the contract.
-You can register your contract directly in `ContractRegistry.java` by adding a line to the `preregisterContracts()` method, or use the `register` command as in
+Write a contract and save it in the `contract` directory. You can then register the contract using the `register` command as in
 
 ```
 register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class
