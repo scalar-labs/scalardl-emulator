@@ -33,10 +33,10 @@ public class Get extends AbstractCommand {
   @Inject
   public Get(
       TerminalWrapper terminal,
-      ContractManagerWrapper manager,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, manager, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override

@@ -40,10 +40,10 @@ public class Execute extends AbstractCommand {
   @Inject
   public Execute(
       TerminalWrapper terminal,
-      ContractManagerWrapper registry,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, registry, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override

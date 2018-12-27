@@ -37,10 +37,10 @@ public class GetWithSingleParameter extends AbstractCommand {
   @Inject
   public GetWithSingleParameter(
       TerminalWrapper terminal,
-      ContractManagerWrapper manager,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
-    super(terminal, manager, assetbase, ledger);
+    super(terminal, contractManager, assetbase, ledger);
   }
 
   @Override
