@@ -16,8 +16,6 @@ import com.scalar.ledger.exception.UnloadableKeyException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,54 +24,12 @@ public class ContractManagerWrapper {
   private ContractManager manager;
   private final List<String> contractIds;
 
-  public ContractManagerWrapper(ContractManager manager) throws RegistryIOException {
+  public ContractManagerWrapper(ContractManager manager) {
     this.manager = manager;
     contractIds = new ArrayList<>();
-
-    preregisterContracts();
   }
 
-  private void preregisterContracts() throws RegistryIOException {
-    try {
-      Path parent =
-          Paths.get(
-              "build",
-              "classes",
-              "java",
-              "main",
-              "com",
-              "scalar",
-              "client",
-              "tool",
-              "emulator",
-              "contract");
-      register(
-          "get",
-          "com.scalar.client.tool.emulator.contract.GetContract",
-          new File(parent.toFile(), "GetContract.class"),
-          new JsonObject());
-      register(
-          "put",
-          "com.scalar.client.tool.emulator.contract.PutContract",
-          new File(parent.toFile(), "PutContract.class"),
-          new JsonObject());
-      register(
-          "scan",
-          "com.scalar.client.tool.emulator.contract.ScanContract",
-          new File(parent.toFile(), "ScanContract.class"),
-          new JsonObject());
-
-    } catch (ContractValidationException
-        | UnloadableKeyException
-        | RegistryException
-        | SignatureException e) {
-      throw new RegistryIOException("couldn't preregister contracts: " + e.getMessage());
-    }
-  }
-
-  public void register(String id, String name, File file, JsonObject properties)
-      throws RegistryException, ContractValidationException, SignatureException,
-          UnloadableKeyException {
+  public void register(String id, String name, File file, JsonObject properties) {
     try {
       byte[] contract = Files.readAllBytes(file.toPath());
       register(toContractEntry(id, name, contract, properties));

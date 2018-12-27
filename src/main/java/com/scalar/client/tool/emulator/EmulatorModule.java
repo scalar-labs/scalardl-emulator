@@ -7,7 +7,6 @@ import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.database.SignedContractRegistry;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
-import com.scalar.ledger.exception.RegistryIOException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.IOException;
@@ -52,7 +51,7 @@ public class EmulatorModule extends AbstractModule {
 
   @Provides
   @Singleton
-  ContractManagerWrapper provideContractManagerWrapper() throws RegistryIOException {
+  ContractManagerWrapper provideContractManagerWrapper() {
     return new ContractManagerWrapper(manager);
   }
 

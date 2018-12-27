@@ -32,21 +32,15 @@ public class ListContracts extends AbstractCommand {
 
   @Override
   public void run() {
-    List<String> contracts = contractManager.getContractIds();
-    if (contracts.isEmpty()) {
+    List<String> contractsIds = contractManager.getContractIds();
+    if (contractsIds.isEmpty()) {
       terminal.println("No registered contracts");
     }
-    for (String id : contracts) {
-      String properties = null;
-      try {
-        properties =
-            contractManager.getProperties(id).isPresent()
-                ? ", properties: " + contractManager.getProperties(id).get()
-                : "";
-      } catch (RegistryIOException e) {
-        // ignore it
-      }
+    contractsIds.forEach(id -> {
+      String properties = contractManager.getProperties(id).isPresent()
+              ? ", properties: " + contractManager.getProperties(id).get()
+              : "";
       terminal.println("id: " + id + properties);
-    }
+    });
   }
 }
