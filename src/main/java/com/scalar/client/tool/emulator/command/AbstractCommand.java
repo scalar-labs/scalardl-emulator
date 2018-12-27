@@ -11,8 +11,6 @@ import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.TransactionalAssetbase;
-import com.scalar.ledger.exception.LedgerException;
-import com.scalar.ledger.exception.UnloadableContractException;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.io.IOException;
@@ -45,18 +43,11 @@ public abstract class AbstractCommand implements Runnable {
   }
 
   void executeContract(String id, JsonObject argument) {
-    try {
-      Contract contract = contractManager.getInstance(id);
-      JsonObject response =
-          contract.invoke(this.ledger, argument, contractManager.getProperties(id));
-      this.assetbase.commit();
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      terminal.println(gson.toJson(response));
-    } catch (UnloadableContractException e) {
-      terminal.println("Could not load contract " + id);
-    } catch (LedgerException e) {
-      terminal.println("Contract execution error: " + e.getMessage());
-    }
+    Contract contract = contractManager.getInstance(id);
+    JsonObject response = contract.invoke(this.ledger, argument, contractManager.getProperties(id));
+    this.assetbase.commit();
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    terminal.println(gson.toJson(response));
   }
 
   JsonObject convertJsonParameter(List<String> values) {

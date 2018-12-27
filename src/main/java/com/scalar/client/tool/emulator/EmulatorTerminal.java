@@ -14,6 +14,7 @@ import com.scalar.client.tool.emulator.command.PutWithSingleParameter;
 import com.scalar.client.tool.emulator.command.Register;
 import com.scalar.client.tool.emulator.command.Scan;
 import com.scalar.client.tool.emulator.command.ScanWithSingleParameter;
+import com.scalar.ledger.exception.RegistryIOException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,8 +23,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-
-import com.scalar.ledger.exception.RegistryIOException;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.UserInterruptException;
@@ -139,6 +138,7 @@ public class EmulatorTerminal implements Runnable {
         new File(parent.toFile(), "ScanContract.class"),
         new JsonObject());
   }
+
   private void executeCommandsFile() {
     try (Stream<String> stream = Files.lines(commandsFile.toPath())) {
       stream.forEach(

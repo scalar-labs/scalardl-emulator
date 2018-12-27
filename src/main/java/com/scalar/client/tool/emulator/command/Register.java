@@ -6,10 +6,6 @@ import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
-import com.scalar.ledger.exception.ContractValidationException;
-import com.scalar.ledger.exception.RegistryException;
-import com.scalar.ledger.exception.SignatureException;
-import com.scalar.ledger.exception.UnloadableKeyException;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.util.List;
@@ -55,7 +51,7 @@ public class Register extends AbstractCommand implements Runnable {
       paramLabel = "contract_property",
       description =
           "the JSON contract property. A plain text JSON object or the path to a file containing a JSON object. For example: {\"x\": \"y\"}")
-  private List<String> contractProperties;
+  private List<String> properties;
 
   @Inject
   public Register(
@@ -72,19 +68,11 @@ public class Register extends AbstractCommand implements Runnable {
     checkArgument(name != null, "name cannot be null");
     checkArgument(contractFile != null, "contractFile cannot be null");
 
-    try {
-      JsonObject properties = null;
-      if (contractProperties != null) {
-        properties = convertJsonParameter(contractProperties);
-      }
-      contractManager.register(id, name, contractFile, properties);
-      terminal.println("Registration success");
-    } catch (UnloadableKeyException
-        | SignatureException
-        | RegistryException
-        | ContractValidationException e) {
-      terminal.println("Contract registration error: " + e.getMessage());
-      terminal.println("Failed to register " + name + " -> " + id);
+    JsonObject json = null;
+    if (properties != null) {
+      json = convertJsonParameter(properties);
     }
+    contractManager.register(id, name, contractFile, json);
+    terminal.println("Registration success");
   }
 }

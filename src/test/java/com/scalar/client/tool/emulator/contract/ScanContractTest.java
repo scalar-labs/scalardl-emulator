@@ -6,9 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
-import com.scalar.ledger.exception.AssetCommitException;
-import com.scalar.ledger.exception.ContractExecutionException;
-import com.scalar.ledger.exception.UnknownAssetStatusException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
@@ -25,29 +22,24 @@ public class ScanContractTest {
   private Ledger ledger = new AssetLedger(assetbase);
 
   @Before
-  public void setUp() throws ContractExecutionException {
+  public void setUp() {
     putAnAgeTwoAssetInTheLedger();
     argument = new JsonObject();
     argument.addProperty("asset_id", ASSET_ID);
   }
 
-  private void putAnAgeTwoAssetInTheLedger() throws ContractExecutionException {
-    try {
-      JsonObject argument = new JsonObject();
-      argument.addProperty("asset_id", ASSET_ID);
-      argument.add("data", new JsonObject());
-      put.invoke(ledger, argument, Optional.empty());
-      assetbase.commit();
-      put.invoke(ledger, argument, Optional.empty());
-      assetbase.commit();
-    } catch (AssetCommitException | UnknownAssetStatusException e) {
-      throw new ContractExecutionException(e.getMessage());
-    }
+  private void putAnAgeTwoAssetInTheLedger() {
+    JsonObject argument = new JsonObject();
+    argument.addProperty("asset_id", ASSET_ID);
+    argument.add("data", new JsonObject());
+    put.invoke(ledger, argument, Optional.empty());
+    assetbase.commit();
+    put.invoke(ledger, argument, Optional.empty());
+    assetbase.commit();
   }
 
   @Test
-  public void invoke_AssetExistsAndIdGiven_ShouldResultInSuccessWithAsset()
-      throws ContractExecutionException {
+  public void invoke_AssetExistsAndIdGiven_ShouldResultInSuccessWithAsset() {
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());
 
@@ -57,8 +49,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_AssetDoesNotExist_ShouldResultInSuccessWithEmptyList()
-      throws ContractExecutionException {
+  public void invoke_AssetDoesNotExist_ShouldResultInSuccessWithEmptyList() {
     // Arrange
     JsonObject argument = new JsonObject();
     argument.addProperty("asset_id", WRONG_ASSET_ID);
@@ -72,7 +63,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void run_AssetIdNotGiven_ShouldFailProperly() throws Exception {
+  public void run_AssetIdNotGiven_ShouldFailProperly() {
     // Arrange
     JsonObject argument = new JsonObject();
 
@@ -85,8 +76,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenInclusiveStartVersion_ShouldReturnCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenInclusiveStartVersion_ShouldReturnCorrectData() {
     // Arrange
     argument.addProperty("start", "[1");
 
@@ -101,8 +91,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenExclusiveStartVersion_ShouldReturnCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenExclusiveStartVersion_ShouldReturnCorrectData() {
     // Arrange
     argument.addProperty("start", "]0");
 
@@ -117,8 +106,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenStartVersionTooLarge_ShouldReturnEmptyData()
-      throws ContractExecutionException {
+  public void invoke_GivenStartVersionTooLarge_ShouldReturnEmptyData() {
     // Arrange
     argument.addProperty("start", "[5");
 
@@ -131,8 +119,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenMalformedStartVersion_ShouldResultInFailure()
-      throws ContractExecutionException {
+  public void invoke_GivenMalformedStartVersion_ShouldResultInFailure() {
     // Arrange
     argument.addProperty("start", "&&");
 
@@ -145,8 +132,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenInclusiveEndVersion_ShouldReturnCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenInclusiveEndVersion_ShouldReturnCorrectData() {
     // Arrange
     argument.addProperty("end", "0]");
 
@@ -161,8 +147,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenExclusiveEndVersion_ShouldReturnCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenExclusiveEndVersion_ShouldReturnCorrectData() {
     // Arrange
     argument.addProperty("end", "1[");
 
@@ -177,8 +162,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenMalformedEndVersion_ShouldResultInFailure()
-      throws ContractExecutionException {
+  public void invoke_GivenMalformedEndVersion_ShouldResultInFailure() {
     // Arrange
     argument.addProperty("end", "&&");
 
@@ -191,7 +175,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenProperLimit_ShouldReturnCorrectData() throws ContractExecutionException {
+  public void invoke_GivenProperLimit_ShouldReturnCorrectData() {
     // Arrange
     argument.addProperty("limit", 1);
 
@@ -206,7 +190,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenNegativeLimit_ShouldResultInFailure() throws ContractExecutionException {
+  public void invoke_GivenNegativeLimit_ShouldResultInFailure() {
     // Arrange
     argument.addProperty("limit", -5);
 
@@ -219,7 +203,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenAscOrdering_ShouldResultCorrectData() throws ContractExecutionException {
+  public void invoke_GivenAscOrdering_ShouldResultCorrectData() {
     // Arrange
     argument.addProperty("asc_order", true);
 
@@ -235,8 +219,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenAscOrderingWithLimit_ShouldResultCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenAscOrderingWithLimit_ShouldResultCorrectData() {
     // Arrange
     argument.addProperty("asc_order", true);
     argument.addProperty("limit", 1);
@@ -252,8 +235,7 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenStartInclusiveAscOrderingWithLimit_ShouldResultCorrectData()
-      throws ContractExecutionException {
+  public void invoke_GivenStartInclusiveAscOrderingWithLimit_ShouldResultCorrectData() {
     // Arrange
     argument.addProperty("start", "[1");
     argument.addProperty("limit", 1);

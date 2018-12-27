@@ -6,11 +6,6 @@ import com.google.gson.JsonObject;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
-import com.scalar.ledger.exception.ContractValidationException;
-import com.scalar.ledger.exception.LedgerException;
-import com.scalar.ledger.exception.RegistryException;
-import com.scalar.ledger.exception.SignatureException;
-import com.scalar.ledger.exception.UnloadableKeyException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
@@ -26,9 +21,7 @@ public class NestedInvocationTest {
   private ContractManagerWrapper contractManager;
 
   @Before
-  public void setUp()
-      throws RegistryException, SignatureException, ContractValidationException,
-          UnloadableKeyException {
+  public void setUp() {
     ledger = new AssetLedger(new AssetbaseEmulator());
     contractManager =
         new ContractManagerWrapper(new ContractManager(new ContractRegistryEmulator()));
@@ -37,9 +30,7 @@ public class NestedInvocationTest {
     registerContract("callee", "Callee");
   }
 
-  private void registerContract(String id, String name)
-      throws RegistryException, ContractValidationException, UnloadableKeyException,
-          SignatureException {
+  private void registerContract(String id, String name) {
     Path parent =
         Paths.get(
             "build", "classes", "java", "test", "com", "scalar", "client", "tool", "emulator");
@@ -51,7 +42,7 @@ public class NestedInvocationTest {
   }
 
   @Test
-  public void invoke_NestedInvocation_ShouldExecuteBothContracts() throws LedgerException {
+  public void invoke_NestedInvocation_ShouldExecuteBothContracts() {
     // Arrange
     Contract contract = contractManager.getInstance("caller");
     JsonObject argument = new JsonObject();

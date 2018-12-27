@@ -15,7 +15,7 @@ import org.jline.terminal.Terminal;
 import picocli.CommandLine;
 
 @Immutable
-public final class TerminalWrapper {
+public class TerminalWrapper {
   public static final int USAGE_HELP_WIDTH = 150;
   public static final String LINE_HEADER = "scalar> ";
   private final Terminal terminal;
