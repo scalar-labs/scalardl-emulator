@@ -23,7 +23,7 @@ public class ContractRegistryEmulator implements SignedContractRegistry {
     contracts.remove(id);
   }
 
-  public ContractEntry lookup(String id) throws MissingContractException {
+  public ContractEntry lookup(String id) {
     if (contracts.containsKey(id)) {
       return contracts.get(id);
     }

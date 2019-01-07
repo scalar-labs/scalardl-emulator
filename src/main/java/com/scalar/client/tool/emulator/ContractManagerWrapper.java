@@ -5,14 +5,7 @@ import com.google.gson.JsonObject;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
-import com.scalar.ledger.exception.ContractValidationException;
-import com.scalar.ledger.exception.MissingCertificateException;
-import com.scalar.ledger.exception.MissingContractException;
-import com.scalar.ledger.exception.RegistryException;
 import com.scalar.ledger.exception.RegistryIOException;
-import com.scalar.ledger.exception.SignatureException;
-import com.scalar.ledger.exception.UnloadableContractException;
-import com.scalar.ledger.exception.UnloadableKeyException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,24 +44,20 @@ public class ContractManagerWrapper {
         "signature".getBytes());
   }
 
-  public void register(ContractEntry entry)
-      throws RegistryException, ContractValidationException, SignatureException,
-          UnloadableKeyException {
+  public void register(ContractEntry entry) {
     contractIds.add(entry.getId());
     manager.register(entry);
   }
 
-  public ContractEntry get(String id)
-      throws MissingContractException, MissingCertificateException, RegistryIOException,
-          SignatureException, ContractValidationException, UnloadableKeyException {
+  public ContractEntry get(String id) {
     return manager.get(id);
   }
 
-  public Contract getInstance(String id) throws UnloadableContractException {
+  public Contract getInstance(String id) {
     return manager.getInstance(id);
   }
 
-  public Optional<JsonObject> getProperties(String id) throws RegistryIOException {
+  public Optional<JsonObject> getProperties(String id) {
     try {
       ContractEntry entry = manager.get(id);
       return entry.getProperties();

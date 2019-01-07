@@ -14,7 +14,6 @@ import com.scalar.client.tool.emulator.command.PutWithSingleParameter;
 import com.scalar.client.tool.emulator.command.Register;
 import com.scalar.client.tool.emulator.command.Scan;
 import com.scalar.client.tool.emulator.command.ScanWithSingleParameter;
-import com.scalar.ledger.exception.RegistryIOException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -109,7 +108,7 @@ public class EmulatorTerminal implements Runnable {
     }
   }
 
-  private void preregisterContracts() throws RegistryIOException {
+  private void preregisterContracts() {
     Path parent =
         Paths.get(
             "build",
