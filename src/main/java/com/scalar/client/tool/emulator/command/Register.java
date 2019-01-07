@@ -2,7 +2,6 @@ package com.scalar.client.tool.emulator.command;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
@@ -10,6 +9,7 @@ import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -73,6 +73,6 @@ public class Register extends AbstractCommand implements Runnable {
       json = convertJsonParameter(properties);
     }
     contractManager.register(id, name, contractFile, json);
-    terminal.println("Registration success");
+    terminal.println("Contract '" + id + "' successfully registered");
   }
 }

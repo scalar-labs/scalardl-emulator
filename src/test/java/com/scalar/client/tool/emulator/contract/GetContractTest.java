@@ -2,72 +2,67 @@ package com.scalar.client.tool.emulator.contract;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.google.gson.JsonObject;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
-import org.junit.Before;
+import javax.json.Json;
+import javax.json.JsonObject;
 import org.junit.Test;
 
 public class GetContractTest {
   private static final String ASSET_ID = "X";
-  private static final String WRONG_ASSET_ID = "Y";
   private PutContract put = new PutContract();
   private GetContract get = new GetContract();
   private TransactionalAssetbase assetbase = new AssetbaseEmulator();
   private Ledger ledger = new AssetLedger(assetbase);
-  private JsonObject argument;
-
-  @Before
-  public void setUp() {
-    addAssetToLedger();
-    argument = new JsonObject();
-  }
 
   private void addAssetToLedger() {
-    JsonObject argument = new JsonObject();
-    argument.addProperty("asset_id", ASSET_ID);
-    argument.add("data", new JsonObject());
+    JsonObject argument =
+        Json.createObjectBuilder()
+            .add("asset_id", ASSET_ID)
+            .add("data", Json.createObjectBuilder().build())
+            .build();
     put.invoke(ledger, argument, Optional.empty());
   }
 
   @Test
   public void invoke_AssetIdGiven_ShouldResultInSuccess() {
     // Arrange
-    argument.addProperty("asset_id", ASSET_ID);
+    addAssetToLedger();
+    JsonObject argument = Json.createObjectBuilder().add("asset_id", ASSET_ID).build();
 
     // Act
     JsonObject result = get.invoke(ledger, argument, Optional.empty());
 
     // Assert
-    assertThat(result.get("result").getAsString()).isEqualTo("success");
+    assertThat(result.getString("asset_id")).isEqualTo(ASSET_ID);
   }
 
   @Test
   public void invoke_AssetNotInLedger_ShouldResultInFailure() {
     // Arrange
-    argument.addProperty("asset_id", WRONG_ASSET_ID);
+    JsonObject argument = Json.createObjectBuilder().add("asset_id", ASSET_ID).build();
 
     // Act
     JsonObject result = get.invoke(ledger, argument, Optional.empty());
 
     // Assert
-    assertThat(result.get("result").getAsString()).isEqualTo("failure");
-    assertThat(result.get("message").getAsString()).endsWith("is not in the ledger");
+    assertThat(result.getString("result")).isEqualTo("failure");
+    assertThat(result.getString("message")).endsWith("is not in the ledger");
   }
 
   @Test
   public void invoke_AssetIdNotGiven_ShouldResultInFailure() {
     // Arrange
-    JsonObject argument = new JsonObject();
+    JsonObject argument = Json.createObjectBuilder().build();
 
     // Act
     JsonObject result = get.invoke(ledger, argument, Optional.empty());
 
     // Assert
-    assertThat(result.get("result").getAsString()).isEqualTo("failure");
-    assertThat(result.get("message").getAsString()).isEqualTo("'asset_id' attribute is missing");
+    assertThat(result.getString("result")).isEqualTo("failure");
+    assertThat(result.getString("message")).isEqualTo("'asset_id' attribute is missing");
   }
 }

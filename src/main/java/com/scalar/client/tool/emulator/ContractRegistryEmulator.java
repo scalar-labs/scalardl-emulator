@@ -3,6 +3,7 @@ package com.scalar.client.tool.emulator;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.database.SignedContractRegistry;
 import com.scalar.ledger.exception.MissingContractException;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,24 +1,23 @@
 package com.scalar.client.tool.emulator.contract;
 
-import com.google.gson.JsonObject;
 import com.scalar.ledger.asset.Asset;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
+import javax.json.Json;
+import javax.json.JsonObject;
 
 public class StateUpdater extends Contract {
 
   @Override
   public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> properties) {
-    JsonObject json = new JsonObject();
-    String assetId = argument.get("asset_id").getAsString();
-    int state = argument.get("state").getAsInt();
+    String assetId = argument.getString("asset_id");
+    int state = argument.getInt("state");
 
     Optional<Asset> asset = ledger.get(assetId);
-    if (!asset.isPresent() || asset.get().data().get("state").getAsInt() != state) {
-      json.addProperty("state", state);
-      ledger.put(assetId, json);
+    if (!asset.isPresent() || asset.get().data().getInt("state") != state) {
+      ledger.put(assetId, Json.createObjectBuilder().add("state", state).build());
     }
-    return new JsonObject();
+    return null;
   }
 }

@@ -1,12 +1,12 @@
 package com.scalar.client.tool.emulator.command;
 
-import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.List;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
