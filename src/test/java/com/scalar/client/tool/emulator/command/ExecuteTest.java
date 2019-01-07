@@ -4,48 +4,42 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.gson.JsonObject;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.scalar.client.tool.emulator.ContractRegistry;
-import com.scalar.client.tool.emulator.EmulatorModule;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
+import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
-import com.scalar.ledger.exception.LedgerException;
+import com.scalar.ledger.emulator.AssetbaseEmulator;
 import com.scalar.ledger.ledger.Ledger;
-import java.io.IOException;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import picocli.CommandLine;
 
-@Ignore
 public class ExecuteTest {
   private static final String CONTRACT_ID = "test_contract";
+  private Execute execute;
+  AssetbaseEmulator assetbase;
   @Mock Contract contract;
-  Ledger ledger;
-  private JsonObject argument;
-  Injector injector;
-  Execute execute;
-  ContractRegistry contractRegistry;
+  @Mock ContractManagerWrapper contractManager;
+  @Mock Ledger ledger;
+  @Mock TerminalWrapper terminal;
 
   @Before
-  public void setUp() throws LedgerException, IOException {
+  public void setUp() {
     MockitoAnnotations.initMocks(this);
-    injector = Guice.createInjector(new EmulatorModule());
-    execute = injector.getInstance(Execute.class);
-    ledger = injector.getInstance(Ledger.class);
-    contractRegistry = injector.getInstance(ContractRegistry.class);
-    contractRegistry.putContract(CONTRACT_ID, contract);
-
-    argument = new JsonObject();
-    argument.addProperty("x", "y");
-    when(contract.invoke(ledger, argument, Optional.empty())).thenReturn(new JsonObject());
+    assetbase = new AssetbaseEmulator();
+    execute = new Execute(terminal, contractManager, assetbase, ledger);
   }
 
   @Test
-  public void run_JsonArgumentAsText_nominal() throws LedgerException {
+  public void run_ExecuteContract_ShouldCallInvokeOnTheContract() {
+    // Arrange
+    JsonObject argument = new JsonObject();
+    argument.addProperty("x", "y");
+    when(contractManager.getInstance(CONTRACT_ID)).thenReturn(contract);
+    when(contract.invoke(ledger, argument, Optional.empty())).thenReturn(new JsonObject());
+
     // Act
     CommandLine.run(execute, CONTRACT_ID, argument.toString());
 

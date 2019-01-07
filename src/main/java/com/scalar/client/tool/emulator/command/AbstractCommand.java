@@ -7,23 +7,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
-import com.scalar.client.tool.emulator.ContractRegistry;
+import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.TransactionalAssetbase;
-import com.scalar.ledger.exception.LedgerException;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 import picocli.CommandLine;
 
 public abstract class AbstractCommand implements Runnable {
   TerminalWrapper terminal;
-  ContractRegistry contractRegistry;
+  ContractManagerWrapper contractManager;
   TransactionalAssetbase assetbase;
   Ledger ledger;
 
@@ -35,31 +33,21 @@ public abstract class AbstractCommand implements Runnable {
 
   public AbstractCommand(
       TerminalWrapper terminal,
-      ContractRegistry contractRegistry,
+      ContractManagerWrapper contractManager,
       TransactionalAssetbase assetbase,
       Ledger ledger) {
     this.terminal = terminal;
-    this.contractRegistry = contractRegistry;
+    this.contractManager = contractManager;
     this.assetbase = assetbase;
     this.ledger = ledger;
   }
 
   void executeContract(String id, JsonObject argument) {
-    Optional<Contract> contract = contractRegistry.getContract(id);
-    if (!contract.isPresent()) {
-      terminal.println("Contract " + id + " does not seem to be registered");
-      return;
-    }
-
-    try {
-      JsonObject response =
-          contract.get().invoke(this.ledger, argument, contractRegistry.getProperty(id));
-      this.assetbase.commit();
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      terminal.println(gson.toJson(response));
-    } catch (LedgerException e) {
-      terminal.println("Contract execution error: " + e.getMessage());
-    }
+    Contract contract = contractManager.getInstance(id);
+    JsonObject response = contract.invoke(this.ledger, argument, contractManager.getProperties(id));
+    this.assetbase.commit();
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    terminal.println(gson.toJson(response));
   }
 
   JsonObject convertJsonParameter(List<String> values) {

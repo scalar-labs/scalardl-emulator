@@ -6,8 +6,6 @@ import com.scalar.ledger.asset.Asset;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.AssetFilter;
 import com.scalar.ledger.database.AssetFilter.VersionOrder;
-import com.scalar.ledger.exception.AssetbaseIOException;
-import com.scalar.ledger.exception.ContractExecutionException;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +13,7 @@ import java.util.regex.Pattern;
 
 public class ScanContract extends Contract {
   @Override
-  public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> property)
-      throws ContractExecutionException {
+  public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> property) {
     final Pattern startPattern = Pattern.compile("(^\\[|\\]{1})(\\d+$)");
     final Pattern endPattern = Pattern.compile("(^\\d+)(\\[|\\]{1}$)");
     final Pattern numberPattern = Pattern.compile("[^\\d]");
@@ -25,14 +22,14 @@ public class ScanContract extends Contract {
     JsonObject result = new JsonObject();
     AssetFilter filter;
 
-    if (argument.has("asset_id")) {
-      String key = argument.get("asset_id").getAsString();
-      filter = new AssetFilter(key);
-    } else {
+    if (!argument.has("asset_id")) {
       result.addProperty("result", "failure");
       result.addProperty("message", "'asset_id' attribute is missing");
       return result;
     }
+
+    String key = argument.get("asset_id").getAsString();
+    filter = new AssetFilter(key);
 
     if (argument.has("start")) {
       String start = argument.get("start").getAsString();
@@ -88,21 +85,17 @@ public class ScanContract extends Contract {
       }
     }
 
-    try {
-      List<Asset> history = ledger.scan(filter);
-      JsonArray assets = new JsonArray();
-      for (Asset asset : history) {
-        JsonObject json = new JsonObject();
-        json.addProperty("id", asset.id());
-        json.addProperty("age", asset.age());
-        json.add("data", asset.data());
-        assets.add(json);
-      }
-      result.addProperty("result", "success");
-      result.add("data", assets);
-    } catch (AssetbaseIOException e) {
-      throw new ContractExecutionException("Error retrieving asset history " + filter.getId(), e);
+    List<Asset> history = ledger.scan(filter);
+    JsonArray assets = new JsonArray();
+    for (Asset asset : history) {
+      JsonObject json = new JsonObject();
+      json.addProperty("id", asset.id());
+      json.addProperty("age", asset.age());
+      json.add("data", asset.data());
+      assets.add(json);
     }
+    result.addProperty("result", "success");
+    result.add("data", assets);
     return result;
   }
 }

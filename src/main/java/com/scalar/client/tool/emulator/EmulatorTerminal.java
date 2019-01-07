@@ -1,5 +1,6 @@
 package com.scalar.client.tool.emulator;
 
+import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -16,6 +17,8 @@ import com.scalar.client.tool.emulator.command.ScanWithSingleParameter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,7 +39,7 @@ import picocli.CommandLine;
 public class EmulatorTerminal implements Runnable {
   private static List<CommandLine> commands;
   private TerminalWrapper terminal;
-  private ContractRegistry contractRegistry;
+  private ContractManagerWrapper contractManager;
   private boolean shouldExit;
 
   @CommandLine.Option(
@@ -53,12 +56,14 @@ public class EmulatorTerminal implements Runnable {
   private boolean help;
 
   @Inject
-  public EmulatorTerminal(TerminalWrapper terminal, ContractRegistry contractRegistry) {
+  public EmulatorTerminal(TerminalWrapper terminal, ContractManagerWrapper contractManager) {
     this.terminal = terminal;
-    this.contractRegistry = contractRegistry;
+    this.contractManager = contractManager;
+
+    preregisterContracts();
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     Injector injector = Guice.createInjector(new EmulatorModule());
 
     commands =
@@ -101,6 +106,36 @@ public class EmulatorTerminal implements Runnable {
         break;
       }
     }
+  }
+
+  private void preregisterContracts() {
+    Path parent =
+        Paths.get(
+            "build",
+            "classes",
+            "java",
+            "main",
+            "com",
+            "scalar",
+            "client",
+            "tool",
+            "emulator",
+            "contract");
+    contractManager.register(
+        "get",
+        "com.scalar.client.tool.emulator.contract.GetContract",
+        new File(parent.toFile(), "GetContract.class"),
+        new JsonObject());
+    contractManager.register(
+        "put",
+        "com.scalar.client.tool.emulator.contract.PutContract",
+        new File(parent.toFile(), "PutContract.class"),
+        new JsonObject());
+    contractManager.register(
+        "scan",
+        "com.scalar.client.tool.emulator.contract.ScanContract",
+        new File(parent.toFile(), "ScanContract.class"),
+        new JsonObject());
   }
 
   private void executeCommandsFile() {

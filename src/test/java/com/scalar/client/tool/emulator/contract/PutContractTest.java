@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.gson.JsonObject;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
-import com.scalar.ledger.exception.ContractExecutionException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
@@ -18,7 +17,7 @@ public class PutContractTest {
   private Ledger ledger = new AssetLedger(assetbase);
 
   @Test
-  public void invoke_AssetIdAndDataGiven_ShouldResultInSuccess() throws ContractExecutionException {
+  public void invoke_AssetIdAndDataGiven_ShouldResultInSuccess() {
     // Arrange
     JsonObject argument = new JsonObject();
     argument.addProperty("asset_id", ASSET_ID);
@@ -32,7 +31,7 @@ public class PutContractTest {
   }
 
   @Test
-  public void invoke_AssetIdNotGiven_ShouldResultInFailure() throws ContractExecutionException {
+  public void invoke_AssetIdNotGiven_ShouldResultInFailure() {
     // Arrange
     JsonObject argument = new JsonObject();
 

@@ -1,10 +1,9 @@
 package com.scalar.client.tool.emulator.contract;
 
 import com.google.gson.JsonObject;
-import com.scalar.ledger.contract.Contract;
-import com.scalar.ledger.exception.AssetbaseIOException;
-import com.scalar.ledger.ledger.Ledger;
 import com.scalar.ledger.asset.Asset;
+import com.scalar.ledger.contract.Contract;
+import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
 
 public class StateUpdater extends Contract {
@@ -15,20 +14,11 @@ public class StateUpdater extends Contract {
     String assetId = argument.get("asset_id").getAsString();
     int state = argument.get("state").getAsInt();
 
-    Optional<Asset> asset = null;
-    try {
-      asset = ledger.get(assetId);
-    } catch (AssetbaseIOException e) {
-      JsonObject response = new JsonObject();
-      response.addProperty("error_message", e.getMessage());
-      return response;
-    }
-
+    Optional<Asset> asset = ledger.get(assetId);
     if (!asset.isPresent() || asset.get().data().get("state").getAsInt() != state) {
       json.addProperty("state", state);
       ledger.put(assetId, json);
     }
-
     return new JsonObject();
   }
 }
