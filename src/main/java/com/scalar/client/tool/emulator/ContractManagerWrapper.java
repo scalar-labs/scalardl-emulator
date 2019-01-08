@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
+import com.scalar.ledger.exception.RegistryIOException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +28,7 @@ public class ContractManagerWrapper {
       byte[] contract = Files.readAllBytes(file.toPath());
       register(toContractEntry(id, name, contract, properties));
     } catch (IOException e) {
-      throw new RuntimeException("could not register contract " + id);
+      throw new RegistryIOException("could not register contract " + id);
     }
   }
 
