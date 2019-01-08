@@ -2,7 +2,6 @@ package com.scalar.client.tool.emulator;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import com.google.gson.JsonObject;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
@@ -12,6 +11,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import javax.json.Json;
+import javax.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,15 +39,15 @@ public class NestedInvocationTest {
         id,
         "com.scalar.client.tool.emulator." + name,
         new File(parent.toFile(), name + ".class"),
-        new JsonObject());
+        null);
   }
 
   @Test
   public void invoke_NestedInvocation_ShouldExecuteBothContracts() {
     // Arrange
     Contract contract = contractManager.getInstance("caller");
-    JsonObject argument = new JsonObject();
-    argument.addProperty(CONTRACT_ID_ATTRIBUTE_NAME, "callee");
+    JsonObject argument =
+        Json.createObjectBuilder().add(CONTRACT_ID_ATTRIBUTE_NAME, "callee").build();
 
     // Act assert
     assertThatCode(() -> contract.invoke(ledger, argument, Optional.empty()))

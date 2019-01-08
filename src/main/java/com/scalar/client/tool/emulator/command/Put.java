@@ -1,12 +1,13 @@
 package com.scalar.client.tool.emulator.command;
 
-import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.List;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -50,13 +51,11 @@ public class Put extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject argument = new JsonObject();
     JsonObject data = convertJsonParameter(jsonObject);
 
     if (data != null) {
-      argument.addProperty("asset_id", key);
-      argument.add("data", data);
-      executeContract(COMMAND_NAME, argument);
+      executeContract(
+          COMMAND_NAME, Json.createObjectBuilder().add("asset_id", key).add("data", data).build());
     }
   }
 }

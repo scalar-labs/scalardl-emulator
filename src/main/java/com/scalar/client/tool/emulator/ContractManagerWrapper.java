@@ -1,17 +1,18 @@
 package com.scalar.client.tool.emulator;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.exception.RegistryIOException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.json.JsonObject;
 
 public class ContractManagerWrapper {
   private ContractManager manager;
@@ -27,7 +28,7 @@ public class ContractManagerWrapper {
       byte[] contract = Files.readAllBytes(file.toPath());
       register(toContractEntry(id, name, contract, properties));
     } catch (IOException e) {
-      throw new RegistryIOException("register error. unable to read file: " + e.getMessage());
+      throw new RegistryIOException("could not register contract " + id);
     }
   }
 
@@ -58,12 +59,8 @@ public class ContractManagerWrapper {
   }
 
   public Optional<JsonObject> getProperties(String id) {
-    try {
-      ContractEntry entry = manager.get(id);
-      return entry.getProperties();
-    } catch (Exception e) {
-      throw new RegistryIOException("registry error: " + e.getMessage());
-    }
+    ContractEntry entry = manager.get(id);
+    return entry.getProperties();
   }
 
   public List<String> getContractIds() {

@@ -3,13 +3,14 @@ package com.scalar.client.tool.emulator.command;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
+import javax.json.Json;
+import javax.json.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,10 +36,9 @@ public class ExecuteTest {
   @Test
   public void run_ExecuteContract_ShouldCallInvokeOnTheContract() {
     // Arrange
-    JsonObject argument = new JsonObject();
-    argument.addProperty("x", "y");
+    JsonObject argument = Json.createObjectBuilder().add("x", "y").build();
     when(contractManager.getInstance(CONTRACT_ID)).thenReturn(contract);
-    when(contract.invoke(ledger, argument, Optional.empty())).thenReturn(new JsonObject());
+    when(contract.invoke(ledger, argument, Optional.empty())).thenReturn(null);
 
     // Act
     CommandLine.run(execute, CONTRACT_ID, argument.toString());

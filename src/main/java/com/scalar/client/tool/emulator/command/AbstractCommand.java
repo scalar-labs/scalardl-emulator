@@ -1,12 +1,5 @@
 package com.scalar.client.tool.emulator.command;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
@@ -15,8 +8,19 @@ import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
+
 import picocli.CommandLine;
 
 public abstract class AbstractCommand implements Runnable {
@@ -46,8 +50,15 @@ public abstract class AbstractCommand implements Runnable {
     Contract contract = contractManager.getInstance(id);
     JsonObject response = contract.invoke(this.ledger, argument, contractManager.getProperties(id));
     this.assetbase.commit();
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    terminal.println(gson.toJson(response));
+    if (response != null) {
+      Map<String, Object> properties = new HashMap<>();
+      properties.put(JsonGenerator.PRETTY_PRINTING, true);
+      JsonWriterFactory writerFactory = Json.createWriterFactory(properties);
+      StringWriter stringWriter = new StringWriter();
+      JsonWriter jsonWriter = writerFactory.createWriter(stringWriter);
+      jsonWriter.writeObject(response);
+      terminal.println(stringWriter.toString());
+    }
   }
 
   JsonObject convertJsonParameter(List<String> values) {
@@ -56,10 +67,10 @@ public abstract class AbstractCommand implements Runnable {
       if (text.contains(File.separator)) {
         text = new String(Files.readAllBytes(new File(text).toPath()));
       }
-      JsonReader reader = new JsonReader(new StringReader(text));
-      reader.setLenient(true);
-      return new JsonParser().parse(reader).getAsJsonObject();
-    } catch (IOException | JsonSyntaxException | JsonIOException | IllegalStateException e) {
+
+      JsonReader reader = Json.createReader(new StringReader(text));
+      return reader.readObject();
+    } catch (IOException e) {
       terminal.println("Error parsing json parameter: " + text);
       terminal.println(e.toString());
     }

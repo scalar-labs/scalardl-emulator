@@ -1,6 +1,5 @@
 package com.scalar.client.tool.emulator;
 
-import com.google.gson.JsonObject;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -125,17 +124,17 @@ public class EmulatorTerminal implements Runnable {
         "get",
         "com.scalar.client.tool.emulator.contract.GetContract",
         new File(parent.toFile(), "GetContract.class"),
-        new JsonObject());
+        null);
     contractManager.register(
         "put",
         "com.scalar.client.tool.emulator.contract.PutContract",
         new File(parent.toFile(), "PutContract.class"),
-        new JsonObject());
+        null);
     contractManager.register(
         "scan",
         "com.scalar.client.tool.emulator.contract.ScanContract",
         new File(parent.toFile(), "ScanContract.class"),
-        new JsonObject());
+        null);
   }
 
   private void executeCommandsFile() {

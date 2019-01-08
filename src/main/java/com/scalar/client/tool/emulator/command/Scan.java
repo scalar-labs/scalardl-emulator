@@ -1,11 +1,12 @@
 package com.scalar.client.tool.emulator.command;
 
-import com.google.gson.JsonObject;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -64,25 +65,25 @@ public class Scan extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject argument = new JsonObject();
-    argument.addProperty("asset_id", assetId);
+    JsonObjectBuilder argument = Json.createObjectBuilder();
+    argument.add("asset_id", assetId);
 
     if (ascendingOrder) {
-      argument.addProperty("asc_order", true);
+      argument.add("asc_order", true);
     }
 
     if (start != null) {
-      argument.addProperty("start", start);
+      argument.add("start", start);
     }
 
     if (end != null) {
-      argument.addProperty("end", end);
+      argument.add("end", end);
     }
 
     if (limit > 0) {
-      argument.addProperty("limit", limit);
+      argument.add("limit", limit);
     }
 
-    executeContract(COMMAND_NAME, argument);
+    executeContract(COMMAND_NAME, argument.build());
   }
 }

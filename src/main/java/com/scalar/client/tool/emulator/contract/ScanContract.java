@@ -1,15 +1,14 @@
 package com.scalar.client.tool.emulator.contract;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.scalar.ledger.asset.Asset;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.AssetFilter;
 import com.scalar.ledger.database.AssetFilter.VersionOrder;
 import com.scalar.ledger.ledger.Ledger;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 
 public class ScanContract extends Contract {
   @Override
@@ -19,20 +18,19 @@ public class ScanContract extends Contract {
     final Pattern numberPattern = Pattern.compile("[^\\d]");
     final Pattern startInclusivePattern = Pattern.compile("\\[");
     final Pattern endInclusivePattern = Pattern.compile("\\]");
-    JsonObject result = new JsonObject();
-    AssetFilter filter;
 
-    if (!argument.has("asset_id")) {
-      result.addProperty("result", "failure");
-      result.addProperty("message", "'asset_id' attribute is missing");
-      return result;
+    if (!argument.containsKey("asset_id")) {
+      return Json.createObjectBuilder()
+          .add("result", "failure")
+          .add("message", "'asset_id' attribute is missing")
+          .build();
     }
 
-    String key = argument.get("asset_id").getAsString();
-    filter = new AssetFilter(key);
+    String assetId = argument.getString("asset_id");
+    AssetFilter filter = new AssetFilter(assetId);
 
-    if (argument.has("start")) {
-      String start = argument.get("start").getAsString();
+    if (argument.containsKey("start")) {
+      String start = argument.getString("start");
       int startIndex = 0;
       boolean startInclusive = false;
       if (startPattern.matcher(start).matches()) {
@@ -42,14 +40,15 @@ public class ScanContract extends Contract {
         }
         filter.withStartVersion(startIndex, startInclusive);
       } else {
-        result.addProperty("result", "failure");
-        result.addProperty("message", "Error parsing start option");
-        return result;
+        return Json.createObjectBuilder()
+            .add("result", "failure")
+            .add("message", "Error parsing start option")
+            .build();
       }
     }
 
-    if (argument.has("end")) {
-      String end = argument.get("end").getAsString();
+    if (argument.containsKey("end")) {
+      String end = argument.getString("end");
       int endIndex = 0;
       boolean endInclusive = false;
       if (endPattern.matcher(end).matches()) {
@@ -59,25 +58,27 @@ public class ScanContract extends Contract {
         }
         filter.withEndVersion(endIndex, endInclusive);
       } else {
-        result.addProperty("result", "failure");
-        result.addProperty("message", "Error parsing end option");
-        return result;
+        return Json.createObjectBuilder()
+            .add("result", "failure")
+            .add("message", "Error parsing end option")
+            .build();
       }
     }
 
-    if (argument.has("limit")) {
-      int limit = argument.get("limit").getAsInt();
+    if (argument.containsKey("limit")) {
+      int limit = argument.getInt("limit");
       if (limit > 0) {
         filter.withLimit(limit);
       } else {
-        result.addProperty("result", "failure");
-        result.addProperty("message", "Error parsing limit option");
-        return result;
+        return Json.createObjectBuilder()
+            .add("result", "failure")
+            .add("message", "Error parsing limit option")
+            .build();
       }
     }
 
-    if (argument.has("asc_order")) {
-      boolean ascendingOrder = argument.get("asc_order").getAsBoolean();
+    if (argument.containsKey("asc_order")) {
+      boolean ascendingOrder = argument.getBoolean("asc_order");
       if (ascendingOrder) {
         filter.withVersionOrder(VersionOrder.ASC);
       } else {
@@ -85,17 +86,20 @@ public class ScanContract extends Contract {
       }
     }
 
-    List<Asset> history = ledger.scan(filter);
-    JsonArray assets = new JsonArray();
-    for (Asset asset : history) {
-      JsonObject json = new JsonObject();
-      json.addProperty("id", asset.id());
-      json.addProperty("age", asset.age());
-      json.add("data", asset.data());
-      assets.add(json);
-    }
-    result.addProperty("result", "success");
-    result.add("data", assets);
-    return result;
+    JsonArrayBuilder assets = Json.createArrayBuilder();
+    ledger
+        .scan(filter)
+        .forEach(
+            asset -> {
+              JsonObject json =
+                  Json.createObjectBuilder()
+                      .add("asset_id", asset.id())
+                      .add("age", asset.age())
+                      .add("data", asset.data())
+                      .build();
+              assets.add(json);
+            });
+
+    return Json.createObjectBuilder().add("data", assets.build()).build();
   }
 }
