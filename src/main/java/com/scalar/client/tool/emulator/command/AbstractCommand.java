@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
