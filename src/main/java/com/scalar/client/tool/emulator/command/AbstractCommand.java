@@ -19,7 +19,6 @@ import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
-
 import picocli.CommandLine;
 
 public abstract class AbstractCommand implements Runnable {
