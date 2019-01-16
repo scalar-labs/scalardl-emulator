@@ -1,30 +1,41 @@
 # ScalarDL emulator
 
-This tools offers an interactive command line interface to run Scalar DL Contract implementation on an in-memory ledger.
+This tools offers an interactive command line interface to run Scalar DL on an in-memory ledger.
 
-## Generate the executables
+## Run the tests and generate an executable
 
 ```
 ./gradlew build install
 ```
+
 The executable is found in `build/install/emulator/bin`.
 
 ## Run
 
 To run the emulator
+
 ```
 ./build/install/emulator/bin/emulator
 ```
 
-or pass a file containing a list of commands the tool will execute. For example,
-this will run commands contained in [cmds.txt](https://github.com/scalar-labs/scalardl-emulator/blob/master/cmds.txt)
+or pass a file with `-f` containing a list of commands the emulator will execute. For example,
+this will run the commands contained in [cmds.txt](https://github.com/scalar-labs/scalardl-emulator/blob/master/cmds.txt)
+
 ```
 ./build/install/emulator/bin/emulator -f cmds.txt
 ```
 
-### Exit/Suspend the terminal
+## Exit the emulator
 
-The tool can be exited with the standard shortcut to kill a job or by executing the `exit` command.
+Exit the emulator `exit` or with the standard shortcut to kill a process.
+
+## Registering a contract
+
+Write a contract and save it in the `contract` directory. Rerun `gradle build` to compile it. Then you can start the emulator and register the contract using the `register`. For example, to register the contract `StateUpdater.java` in the contract directory you would
+
+```
+scalar> register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class
+```
 
 ## Help
 
@@ -68,10 +79,6 @@ Options:
 For example: 'execute get {"asset_id":"foo"}'
 ```
 
-## Registering a contract
+## Command history
 
-Write a contract and save it in the `contract` directory. You can then register the contract using the `register` command as in
-
-```
-register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class
-```
+A history of executed commands is saved to `.scalardl_emulator_history` in your home directory.
