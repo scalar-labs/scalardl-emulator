@@ -31,7 +31,7 @@ Exit the emulator `exit` or with the standard shortcut to kill a process.
 
 ## Registering a contract
 
-Write a contract and save it in the `contract` directory. Rerun `gradle build` to compile it. Then you can start the emulator and register the contract using the `register`. For example, to register the contract `StateUpdater.java` in the contract directory you would
+Write a contract and save it in the `contract` directory. Run `./gradlew build` to compile it. Then you can start the emulator and register the contract using the `register`. For example, to register the contract `StateUpdater.java` in the contract directory you would
 
 ```
 scalar> register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class

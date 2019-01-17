@@ -16,7 +16,6 @@ import picocli.CommandLine;
 
 @Immutable
 public class TerminalWrapper {
-  private static final String VERSION = "0.1";
   private final Terminal terminal;
   public static final int USAGE_HELP_WIDTH = 150;
   public static final String LINE_HEADER = "scalar> ";
@@ -42,7 +41,7 @@ public class TerminalWrapper {
   }
 
   public void printWelcomeMessage() {
-    println("Scalar DLT emulator " + VERSION);
+    println("Scalar DL emulator");
     println("Type 'help' for more information");
   }
 

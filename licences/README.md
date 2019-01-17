@@ -2,7 +2,7 @@ This product uses the following open source software.
 
 | Name  | License | Copyright | Link |
 |---|---|---|---|
-| AssertJ | [Apache License 2.0](APL-2.0.txt) | Copyright 2012-2018 the original author or authors | https://github.com/joel-costigliola/assertj-core |
+| AssertJ | [Apache License 2.0](APL-2.0.txt) | Copyright 2012-2018 The original author or authors | https://github.com/joel-costigliola/assertj-core |
 | Gradle | [Apache License 2.0](APL-2.0.txt) | Gradle Inc | https://github.com/gradle/gradle |
 | Guice | [Apache License 2.0](APL-2.0.txt)  | Google LLC | https://github.com/google/guice |
 | JLine | [BSD-3-Clause](BSD-3-Clause-jline.txt)  | Copyright 2002-2018 The original author or authors | https://github.com/jline/jline3 |
