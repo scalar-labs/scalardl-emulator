@@ -1,12 +1,6 @@
-# Scalar DL emulator
+# Scalar DL Emulator
 
-Scalar DL emulator is an interactive command line interface to run Scalar DL on an in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
- 
- There are three predefined and preregistered contracts, with corresponding commands, to `put`, `get`, and `scan` assets. These contracts may be found in the `contract` directory
- 
- ```
- src/main/java/com/scalar/client/tool/emulator/contact
- ```
+Scalar DL Emulator is an interactive command line interface to run Scalar DL on an in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
 
 ## Run the tests and generate an executable
 
@@ -34,6 +28,14 @@ this will run the commands contained in [cmds.txt](https://github.com/scalar-lab
 ## Exit the emulator
 
 Exit the emulator with `exit` or by ctrl-d (EOF).
+
+## Preregistered contracts
+
+ There are three predefined and preregistered contracts, with corresponding commands, to `put`, `get`, and `scan` assets. These contracts may be found in the `contract` directory
+ 
+ ```
+ src/main/java/com/scalar/client/tool/emulator/contact
+ ```
 
 ## Register a contract
 
