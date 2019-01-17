@@ -1,6 +1,12 @@
-# ScalarDL emulator
+# Scalar DL emulator
 
-This tools offers an interactive command line interface to run Scalar DL on an in-memory ledger.
+Scalar DL emulator is an interactive command line interface to run Scalar DL on an in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
+ 
+ There are three predefined and preregistered contracts, with corresponding commands, to `put`, `get`, and `scan` assets. These contracts may be found in the `contract` directory
+ 
+ ```
+ src/main/java/com/scalar/client/tool/emulator/contact
+ ```
 
 ## Run the tests and generate an executable
 
@@ -8,7 +14,7 @@ This tools offers an interactive command line interface to run Scalar DL on an i
 ./gradlew build install
 ```
 
-The executable is found in `build/install/emulator/bin`.
+The executable may be found in `build/install/emulator/bin`.
 
 ## Run
 
@@ -27,14 +33,26 @@ this will run the commands contained in [cmds.txt](https://github.com/scalar-lab
 
 ## Exit the emulator
 
-Exit the emulator `exit` or with the standard shortcut to kill a process.
+Exit the emulator with `exit` or by ctrl-d (EOF).
 
-## Registering a contract
+## Register a contract
 
-Write a contract and save it in the `contract` directory. Run `./gradlew build` to compile it. Then you can start the emulator and register the contract using the `register`. For example, to register the contract `StateUpdater.java` in the contract directory you would
+Write a contract and save it in the `contract` directory
+ 
+ ```
+ src/main/java/com/scalar/client/tool/emulator/contact
+ ```
+
+Run `./gradlew build` to compile the contract. Then start the emulator and register the contract by using the `register` command. For example, to register the contract `StateUpdater.java` with id `state-updater`
 
 ```
 scalar> register state-updater com.scalar.client.tool.emulator.contract.StateUpdater ./build/classes/java/main/com/scalar/client/tool/emulator/contract/StateUpdater.class
+```
+
+Now this contract may be executed, for example, as
+
+```
+scalar> execute state-updater {"asset_id": "Y", "state": 1}"
 ```
 
 ## Help
@@ -58,7 +76,7 @@ Available commands:
 Type '<command> -h' to display help for the command.
 ```
 
-Every command has a detailed help that can be displayed with -h. For example:
+Every command has a detailed help that can be displayed with `-h`. For example:
 
 ```
 scalar> execute -h
@@ -76,9 +94,13 @@ Parameters:
 Options:
   -h, --help        print the help and exit
 
-For example: 'execute get {"asset_id":"foo"}'
+For example: 'execute get {"asset_id": "foo"}'
 ```
 
 ## Command history
 
 A history of executed commands is saved to `.scalardl_emulator_history` in your home directory.
+
+## License
+
+The Scalar DL Emulator is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
