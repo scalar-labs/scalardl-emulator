@@ -31,7 +31,7 @@ Exit the emulator with `exit` or by ctrl-d (EOF).
 
 ## Preregistered contracts
 
- There are three predefined and preregistered contracts, with corresponding commands, to `put`, `get`, and `scan` assets. These contracts may be found in the `contract` directory
+ There are three predefined and preregistered contracts, with corresponding commands, to `put`, `get`, and `scan` assets. These contracts may be found in the `contract` subdirectory
  
  ```
  src/main/java/com/scalar/client/tool/emulator/contact
@@ -39,7 +39,7 @@ Exit the emulator with `exit` or by ctrl-d (EOF).
 
 ## Register a contract
 
-Write a contract and save it in the `contract` directory
+Write a contract and save it in the `contract` subdirectory
  
  ```
  src/main/java/com/scalar/client/tool/emulator/contact
