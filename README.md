@@ -103,6 +103,10 @@ For example: 'execute get {"asset_id": "foo"}'
 
 A history of executed commands is saved to `.scalardl_emulator_history` in your home directory.
 
+## Any questions?
+
+Please [contact us](https://scalar-labs.com/contact_us/).
+
 ## License
 
 The Scalar DL Emulator is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
