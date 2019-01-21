@@ -5,7 +5,6 @@ import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.exception.RegistryIOException;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
