@@ -5,22 +5,22 @@ import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
 import com.scalar.ledger.exception.RegistryIOException;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.json.JsonObject;
 
 public class ContractManagerWrapper {
   private ContractManager manager;
-  private final List<String> contractIds;
+  private final Set<String> contractIds;
 
   public ContractManagerWrapper(ContractManager manager) {
     this.manager = manager;
-    contractIds = new ArrayList<>();
+    contractIds = new TreeSet<>();
   }
 
   public void register(String id, String name, File file, JsonObject properties) {
@@ -46,8 +46,8 @@ public class ContractManagerWrapper {
   }
 
   public void register(ContractEntry entry) {
-    contractIds.add(entry.getId());
     manager.register(entry);
+    contractIds.add(entry.getId());
   }
 
   public ContractEntry get(String id) {
