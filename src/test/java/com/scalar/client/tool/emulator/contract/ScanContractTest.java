@@ -1,6 +1,7 @@
 package com.scalar.client.tool.emulator.contract;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
@@ -79,26 +80,10 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenInclusiveStartVersion_ShouldReturnCorrectData() {
+  public void invoke_GivenStartVersion_ShouldReturnCorrectData() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", "[1").build();
-
-    // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
-    JsonArray data = result.getJsonArray("data");
-
-    // Assert
-    assertThat(data.size()).isEqualTo(1);
-    assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
-    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(1);
-  }
-
-  @Test
-  public void invoke_GivenExclusiveStartVersion_ShouldReturnCorrectData() {
-    // Arrange
-    JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", "]0").build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", 1).build();
 
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());
@@ -114,7 +99,7 @@ public class ScanContractTest {
   public void invoke_GivenStartVersionTooLarge_ShouldReturnEmptyData() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", "[5").build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", 5).build();
 
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());
@@ -125,24 +110,32 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenMalformedStartVersion_ShouldResultInFailure() {
+  public void invoke_GivenNegativeStartVersionTooLarge_ShouldResultInIllegalArgumentException() {
+    // Arrange
+    JsonObject argument =
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", -2).build();
+
+    // Act-assert
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void invoke_GivenMalformedStartVersion_ShouldResultInClassCastException() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", "&&").build();
 
-    // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
-
-    // Assert
-    assertThat(result.getString("result")).isEqualTo("failure");
-    assertThat(result.getString("message")).isEqualTo("Error parsing start option");
+    // Act-asset
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
-  public void invoke_GivenInclusiveEndVersion_ShouldReturnCorrectData() {
+  public void invoke_GivenEndVersion_ShouldReturnCorrectData() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", "0]").build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", 0).build();
 
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());
@@ -155,33 +148,25 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenExclusiveEndVersion_ShouldReturnCorrectData() {
+  public void invoke_GivenNegativeEndVersionTooLarge_ShouldResultInIllegalArgumentException() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", "1[").build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", -2).build();
 
-    // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
-    JsonArray data = result.getJsonArray("data");
-
-    // Assert
-    assertThat(data.size()).isEqualTo(1);
-    assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
-    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(0);
+    // Act-assert
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
-  public void invoke_GivenMalformedEndVersion_ShouldResultInFailure() {
+  public void invoke_GivenMalformedEndVersion_ShouldResultInClassCastException() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", "&&").build();
 
     // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
-
-    // Assert
-    assertThat(result.getString("result")).isEqualTo("failure");
-    assertThat(result.getString("message")).isEqualTo("Error parsing end option");
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -206,12 +191,20 @@ public class ScanContractTest {
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("limit", -5).build();
 
-    // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
+    // Act-assert
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
 
-    // Assert
-    assertThat(result.getString("result")).isEqualTo("failure");
-    assertThat(result.getString("message")).isEqualTo("Error parsing limit option");
+  @Test
+  public void invoke_GivenMalformedLimit_ShouldResultInClassCastException() {
+    // Arrange
+    JsonObject argument =
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("limit", "&&").build();
+
+    // Act
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(ClassCastException.class);
   }
 
   @Test
@@ -252,12 +245,12 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenStartInclusiveAscOrderingWithLimit_ShouldResultCorrectData() {
+  public void invoke_GivenStartVersionAscOrderingAndLimit_ShouldResultCorrectData() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder()
             .add("asset_id", ASSET_ID)
-            .add("start", "[1")
+            .add("start", 1)
             .add("limit", 1)
             .add("asc_order", true)
             .build();

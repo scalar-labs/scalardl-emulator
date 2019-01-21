@@ -20,20 +20,18 @@ import picocli.CommandLine;
     parameterListHeading = "%n@|bold,underline Parameters|@:%n",
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n",
-    footer = "For example:%n" + "- 'scan foo'%n" + "- 'scan foo -a -s [2 -e 5[ -l 2'%n")
+    footer = "For example:%n" + "- 'scan foo'%n" + "- 'scan foo -ascending -start 2 -end 5 -l 2'%n")
 public class Scan extends AbstractCommand {
   static final String COMMAND_NAME = "scan";
 
   @CommandLine.Option(
       names = {"-s", "--start"},
-      description =
-          "an open (inclusive) or closed (exclusive) bracket followed by a number. For example: '[3' will return assets from age >= 3")
+      description = "return only assets with age >= start")
   private String start;
 
   @CommandLine.Option(
       names = {"-e", "--end"},
-      description =
-          "a number followed by an closed (inclusive) or open (exclusive) bracket. For example: '10[' will return assets with age < 10")
+      description = "return only assets with age <= end")
   private String end;
 
   @CommandLine.Option(
