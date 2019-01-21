@@ -27,17 +27,17 @@ public class Scan extends AbstractCommand {
   @CommandLine.Option(
       names = {"-s", "--start"},
       description = "return only assets with age >= start")
-  private String start;
+  private int start;
 
   @CommandLine.Option(
       names = {"-e", "--end"},
-      description = "return only assets with age <= end")
-  private String end;
+      description = "return only assets with age < end")
+  private int end;
 
   @CommandLine.Option(
       names = {"-a", "--ascending"},
       description =
-          "add this flag to return assets in a ascending order. The default order is descending.")
+          "add this flag to return assets in ascending order. The default order is descending.")
   private boolean ascendingOrder;
 
   @CommandLine.Option(
@@ -70,11 +70,11 @@ public class Scan extends AbstractCommand {
       argument.add("asc_order", true);
     }
 
-    if (start != null) {
+    if (start > 0) {
       argument.add("start", start);
     }
 
-    if (end != null) {
+    if (end > 0) {
       argument.add("end", end);
     }
 

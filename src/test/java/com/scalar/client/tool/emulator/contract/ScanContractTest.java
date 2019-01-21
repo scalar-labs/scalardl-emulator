@@ -135,7 +135,7 @@ public class ScanContractTest {
   public void invoke_GivenEndVersion_ShouldReturnCorrectData() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", 0).build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", 1).build();
 
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());

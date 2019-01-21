@@ -33,7 +33,7 @@ public class ScanContract extends Contract {
     if (argument.containsKey("end")) {
       int end = argument.getInt("end");
       checkArgument(end >= 0);
-      filter.withEndVersion(end, true);
+      filter.withEndVersion(end, false);
     }
 
     if (argument.containsKey("limit")) {
