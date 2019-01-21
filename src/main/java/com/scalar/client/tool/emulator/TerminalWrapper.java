@@ -16,9 +16,9 @@ import picocli.CommandLine;
 
 @Immutable
 public class TerminalWrapper {
+  private final Terminal terminal;
   public static final int USAGE_HELP_WIDTH = 150;
   public static final String LINE_HEADER = "scalar> ";
-  private final Terminal terminal;
 
   public TerminalWrapper(Terminal terminal) {
     this.terminal = terminal;
@@ -41,7 +41,7 @@ public class TerminalWrapper {
   }
 
   public void printWelcomeMessage() {
-    println("Scalar DLT emulator 0.1");
+    println("Scalar DL emulator");
     println("Type 'help' for more information");
   }
 
@@ -69,7 +69,7 @@ public class TerminalWrapper {
             .variable(
                 // Location of the file where the executed commands history is saved
                 LineReader.HISTORY_FILE,
-                Paths.get(System.getProperty("user.home"), ".scalardlt_emulator_history"))
+                Paths.get(System.getProperty("user.home"), ".scalardl_emulator_history"))
             .build();
 
     return inputReader;
