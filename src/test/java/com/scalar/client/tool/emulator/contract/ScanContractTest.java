@@ -32,6 +32,8 @@ public class ScanContractTest {
     assetbase.commit();
     put.invoke(ledger, argument, Optional.empty());
     assetbase.commit();
+    put.invoke(ledger, argument, Optional.empty());
+    assetbase.commit();
   }
 
   @Before
@@ -49,7 +51,7 @@ public class ScanContractTest {
     JsonArray data = result.getJsonArray("data");
 
     // Assert
-    assertThat(data.size()).isEqualTo(2);
+    assertThat(data.size()).isEqualTo(3);
     assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
   }
 
@@ -90,9 +92,9 @@ public class ScanContractTest {
     JsonArray data = result.getJsonArray("data");
 
     // Assert
-    assertThat(data.size()).isEqualTo(1);
+    assertThat(data.size()).isEqualTo(2);
     assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
-    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(1);
+    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(2);
   }
 
   @Test
@@ -135,16 +137,16 @@ public class ScanContractTest {
   public void invoke_GivenEndVersion_ShouldReturnCorrectData() {
     // Arrange
     JsonObject argument =
-        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", 1).build();
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", 2).build();
 
     // Act
     JsonObject result = scan.invoke(ledger, argument, Optional.empty());
     JsonArray data = result.getJsonArray("data");
 
     // Assert
-    assertThat(data.size()).isEqualTo(1);
+    assertThat(data.size()).isEqualTo(2);
     assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
-    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(0);
+    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(1);
   }
 
   @Test
@@ -170,6 +172,22 @@ public class ScanContractTest {
   }
 
   @Test
+  public void invoke_GivenStartAndEndVersion_ShouldReturnCorrectData() {
+    // Arrange
+    JsonObject argument =
+        Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", 1).add("end", 2).build();
+
+    // Act
+    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
+    JsonArray data = result.getJsonArray("data");
+
+    // Assert
+    assertThat(data.size()).isEqualTo(1);
+    assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
+    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(1);
+  }
+
+  @Test
   public void invoke_GivenProperLimit_ShouldReturnCorrectData() {
     // Arrange
     JsonObject argument =
@@ -182,7 +200,7 @@ public class ScanContractTest {
     // Assert
     assertThat(data.size()).isEqualTo(1);
     assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
-    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(1);
+    assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(2);
   }
 
   @Test
@@ -218,10 +236,11 @@ public class ScanContractTest {
     JsonArray data = result.getJsonArray("data");
 
     // Assert
-    assertThat(data.size()).isEqualTo(2);
+    assertThat(data.size()).isEqualTo(3);
     assertThat(data.getJsonObject(0).getString("asset_id")).isEqualTo(ASSET_ID);
     assertThat(data.getJsonObject(0).getInt("age")).isEqualTo(0);
     assertThat(data.getJsonObject(1).getInt("age")).isEqualTo(1);
+    assertThat(data.getJsonObject(2).getInt("age")).isEqualTo(2);
   }
 
   @Test
