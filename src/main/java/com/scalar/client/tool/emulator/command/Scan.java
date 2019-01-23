@@ -20,7 +20,10 @@ import picocli.CommandLine;
     parameterListHeading = "%n@|bold,underline Parameters|@:%n",
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n",
-    footer = "For example:%n" + "- 'scan foo'%n" + "- 'scan foo --ascending --start 2 --end 5 --limit 2'%n")
+    footer =
+        "For example:%n"
+            + "- 'scan foo'%n"
+            + "- 'scan foo --ascending --start 2 --end 5 --limit 2'%n")
 public class Scan extends AbstractCommand {
   static final String COMMAND_NAME = "scan";
 
