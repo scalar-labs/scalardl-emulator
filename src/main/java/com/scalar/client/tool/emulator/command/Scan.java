@@ -10,7 +10,7 @@ import javax.json.JsonObjectBuilder;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = Scan.COMMAND_NAME,
+    name = "scan",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -22,7 +22,6 @@ import picocli.CommandLine;
     footerHeading = "%n",
     footer = "For example:%n" + "- 'scan foo'%n" + "- 'scan foo -a -s [2 -e 5[ -l 2'%n")
 public class Scan extends AbstractCommand {
-  static final String COMMAND_NAME = "scan";
 
   @CommandLine.Option(
       names = {"-s", "--start"},
@@ -84,6 +83,6 @@ public class Scan extends AbstractCommand {
       argument.add("limit", limit);
     }
 
-    executeContract(COMMAND_NAME, argument.build());
+    executeContract(toKey("scan"), argument.build());
   }
 }

@@ -10,7 +10,7 @@ import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = ScanWithSingleParameter.COMMAND_NAME,
+    name = "scan -j",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -28,8 +28,6 @@ import picocli.CommandLine;
             + "- desc_order: set to true to return assets in a descending order. The default order is ascending.%n"
             + "- limit: an integer > 0 which is the maximum number of assets returned. By default there is no limit.%n")
 public class ScanWithSingleParameter extends AbstractCommand {
-  static final String COMMAND_NAME = "scan -j";
-  public static final String CONTRACT_NAME = "scan";
 
   @CommandLine.Parameters(
       arity = "1..*",
@@ -51,7 +49,7 @@ public class ScanWithSingleParameter extends AbstractCommand {
   public void run() {
     JsonObject json = convertJsonParameter(this.jsonParameter);
     if (json != null) {
-      executeContract(CONTRACT_NAME, json);
+      executeContract(toKey("scan"), json);
     }
   }
 }

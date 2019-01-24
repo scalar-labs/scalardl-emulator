@@ -10,7 +10,7 @@ import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = GetWithSingleParameter.COMMAND_NAME,
+    name = "get -j",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -24,15 +24,13 @@ import picocli.CommandLine;
         "The JSON argument format is {\"@|fg(blue) asset_id|@\":\"<an_asset_id>\"}.%n"
             + "For example: 'get -j {\"asset_id\":\"foo\"}'.%n")
 public class GetWithSingleParameter extends AbstractCommand {
-  static final String COMMAND_NAME = "get -j";
-  public static final String CONTRACT_NAME = "get";
 
   @CommandLine.Parameters(
       arity = "1..*",
       paramLabel = "argument",
       description =
           "the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object")
-  private List<String> jsonParameter;
+  private List<String> argument;
 
   @Inject
   public GetWithSingleParameter(
@@ -45,9 +43,9 @@ public class GetWithSingleParameter extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject json = convertJsonParameter(jsonParameter);
+    JsonObject json = convertJsonParameter(argument);
     if (json != null) {
-      executeContract(CONTRACT_NAME, json);
+      executeContract(toKey("get"), json);
     }
   }
 }
