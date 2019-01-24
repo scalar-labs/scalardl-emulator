@@ -44,12 +44,12 @@ public class ContractManagerWrapper {
     manager.register(entry);
   }
 
-  public ContractEntry get(ContractEntry.Key id) {
-    return manager.get(id);
+  public ContractEntry get(ContractEntry.Key key) {
+    return manager.get(key);
   }
 
-  public Contract getInstance(ContractEntry.Key id) {
-    return manager.getInstance(id);
+  public Contract getInstance(ContractEntry.Key key) {
+    return manager.getInstance(key);
   }
 
   public List<ContractEntry> scan() {
