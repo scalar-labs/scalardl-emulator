@@ -20,26 +20,27 @@ import picocli.CommandLine;
     parameterListHeading = "%n@|bold,underline Parameters|@:%n",
     optionListHeading = "%n@|bold,underline Options|@:%n",
     footerHeading = "%n",
-    footer = "For example:%n" + "- 'scan foo'%n" + "- 'scan foo -a -s [2 -e 5[ -l 2'%n")
+    footer =
+        "For example:%n"
+            + "- 'scan foo'%n"
+            + "- 'scan foo --ascending --start 2 --end 5 --limit 2'%n")
 public class Scan extends AbstractCommand {
   static final String COMMAND_NAME = "scan";
 
   @CommandLine.Option(
       names = {"-s", "--start"},
-      description =
-          "an open (inclusive) or closed (exclusive) bracket followed by a number. For example: '[3' will return assets from age >= 3")
-  private String start;
+      description = "return only assets with age >= start")
+  private int start;
 
   @CommandLine.Option(
       names = {"-e", "--end"},
-      description =
-          "a number followed by an closed (inclusive) or open (exclusive) bracket. For example: '10[' will return assets with age < 10")
-  private String end;
+      description = "return only assets with age < end")
+  private int end;
 
   @CommandLine.Option(
       names = {"-a", "--ascending"},
       description =
-          "add this flag to return assets in a ascending order. The default order is descending.")
+          "add this flag to return assets in ascending order. The default order is descending.")
   private boolean ascendingOrder;
 
   @CommandLine.Option(
@@ -72,11 +73,11 @@ public class Scan extends AbstractCommand {
       argument.add("asc_order", true);
     }
 
-    if (start != null) {
+    if (start >= 0) {
       argument.add("start", start);
     }
 
-    if (end != null) {
+    if (end > 0) {
       argument.add("end", end);
     }
 
