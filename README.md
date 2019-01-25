@@ -109,4 +109,4 @@ Please [contact us](https://scalar-labs.com/contact_us/).
 
 ## License
 
-Scalar DL client SDK is dual-licensed under both the AGPL (found in the [LICENSE](https://github.com/scalar-labs/scalardl-emulator/blob/master/LICENSE) file in the root directory) and a commercial license. You may select, at your option, one of the above-listed licenses. Regarding the commercial license, please [contact us](https://scalar-labs.com/contact_us/) for more information.
+Scalar DL Emulator is dual-licensed under both the AGPL (found in the [LICENSE](https://github.com/scalar-labs/scalardl-emulator/blob/master/LICENSE) file in the root directory) and a commercial license. You may select, at your option, one of the above-listed licenses. Regarding the commercial license, please [contact us](https://scalar-labs.com/contact_us/) for more information.
