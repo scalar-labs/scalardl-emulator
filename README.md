@@ -109,4 +109,4 @@ Please [contact us](https://scalar-labs.com/contact_us/).
 
 ## License
 
-The Scalar DL Emulator is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+Scalar DL client SDK is dual-licensed under both the AGPL (found in the [LICENSE](https://github.com/scalar-labs/scalardl-emulator/blob/master/LICENSE) file in the root directory) and a commercial license. You may select, at your option, one of the above-listed licenses. Regarding the commercial license, please [contact us](https://scalar-labs.com/contact_us/) for more information.
