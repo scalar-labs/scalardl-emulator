@@ -53,7 +53,7 @@ public class ContractManagerWrapper {
   }
 
   public List<ContractEntry> scan() {
-    CertificateEntry.Key certKey = new CertificateEntry.Key("holderId", 0);
+    CertificateEntry.Key certKey = new CertificateEntry.Key("emulator_user", 0);
     return manager.scan(certKey);
   }
 }
