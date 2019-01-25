@@ -2,6 +2,7 @@ package com.scalar.client.tool.emulator.command;
 
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
+import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.List;
@@ -31,17 +32,14 @@ public class ListContracts extends AbstractCommand {
 
   @Override
   public void run() {
-    List<String> contractsIds = contractManager.getContractIds();
-    if (contractsIds.isEmpty()) {
-      terminal.println("No registered contracts");
-    }
-    contractsIds.forEach(
-        id -> {
+    List<ContractEntry> contractEntries = contractManager.scan();
+    contractEntries.forEach(
+        entry -> {
           String properties =
-              contractManager.getProperties(id).isPresent()
-                  ? ", properties: " + contractManager.getProperties(id).get()
+              entry.getProperties().isPresent()
+                  ? ", properties: " + entry.getProperties().get()
                   : "";
-          terminal.println("id: " + id + properties);
+          terminal.println("id: " + entry.getId() + properties);
         });
   }
 }

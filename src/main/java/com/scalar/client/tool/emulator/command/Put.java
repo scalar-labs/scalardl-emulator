@@ -11,7 +11,7 @@ import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = Put.COMMAND_NAME,
+    name = "put",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -24,7 +24,6 @@ import picocli.CommandLine;
     footerHeading = "%n",
     footer = "Usage example: 'put foo {\"x\": \"y\"}'.%n")
 public class Put extends AbstractCommand {
-  static final String COMMAND_NAME = "put";
 
   @CommandLine.Parameters(
       index = "0",
@@ -38,7 +37,7 @@ public class Put extends AbstractCommand {
       paramLabel = "JSON_object",
       description =
           "the JSON object to be saved on the ledger, it can be a plain text JSON object or the path to a file containing a JSON object")
-  private List<String> jsonObject;
+  private List<String> argument;
 
   @Inject
   public Put(
@@ -51,11 +50,11 @@ public class Put extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject data = convertJsonParameter(jsonObject);
+    JsonObject data = convertJsonParameter(argument);
 
     if (data != null) {
       executeContract(
-          COMMAND_NAME, Json.createObjectBuilder().add("asset_id", key).add("data", data).build());
+          toKey("put"), Json.createObjectBuilder().add("asset_id", key).add("data", data).build());
     }
   }
 }

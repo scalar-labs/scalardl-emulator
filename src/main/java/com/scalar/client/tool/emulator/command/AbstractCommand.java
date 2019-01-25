@@ -3,6 +3,8 @@ package com.scalar.client.tool.emulator.command;
 import com.scalar.client.tool.emulator.ContractManagerWrapper;
 import com.scalar.client.tool.emulator.TerminalWrapper;
 import com.scalar.ledger.contract.Contract;
+import com.scalar.ledger.contract.ContractEntry;
+import com.scalar.ledger.crypto.CertificateEntry;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.ledger.Ledger;
 import java.io.File;
@@ -44,9 +46,10 @@ public abstract class AbstractCommand implements Runnable {
     this.ledger = ledger;
   }
 
-  void executeContract(String id, JsonObject argument) {
-    Contract contract = contractManager.getInstance(id);
-    JsonObject response = contract.invoke(this.ledger, argument, contractManager.getProperties(id));
+  void executeContract(ContractEntry.Key key, JsonObject argument) {
+    Contract contract = contractManager.getInstance(key);
+    JsonObject response =
+        contract.invoke(this.ledger, argument, contractManager.get(key).getProperties());
     this.assetbase.commit();
     if (response != null) {
       Map<String, Object> properties = new HashMap<>();
@@ -57,6 +60,10 @@ public abstract class AbstractCommand implements Runnable {
       jsonWriter.writeObject(response);
       terminal.println(stringWriter.toString());
     }
+  }
+
+  ContractEntry.Key toKey(String id) {
+    return new ContractEntry.Key(id, new CertificateEntry.Key("emulator_user", 0));
   }
 
   JsonObject convertJsonParameter(List<String> values) {

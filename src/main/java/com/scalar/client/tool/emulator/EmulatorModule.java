@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.scalar.ledger.contract.ContractManager;
-import com.scalar.ledger.database.SignedContractRegistry;
+import com.scalar.ledger.database.ContractRegistry;
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
 import com.scalar.ledger.ledger.AssetLedger;
@@ -15,7 +15,7 @@ import org.jline.terminal.TerminalBuilder;
 
 public class EmulatorModule extends AbstractModule {
   private final AssetbaseEmulator assetbase;
-  private final SignedContractRegistry registry;
+  private final ContractRegistry registry;
   private final ContractManager manager;
 
   public EmulatorModule() {
@@ -39,7 +39,7 @@ public class EmulatorModule extends AbstractModule {
 
   @Provides
   @Singleton
-  SignedContractRegistry provideSignedContractRegistry() {
+  ContractRegistry provideContractRegistry() {
     return registry;
   }
 

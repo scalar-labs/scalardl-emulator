@@ -9,7 +9,7 @@ import javax.json.Json;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = Get.COMMAND_NAME,
+    name = "get",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -22,7 +22,6 @@ import picocli.CommandLine;
     footerHeading = "%n",
     footer = "Usage example: 'get foo'.%n")
 public class Get extends AbstractCommand {
-  static final String COMMAND_NAME = "get";
 
   @CommandLine.Parameters(
       index = "0",
@@ -41,6 +40,6 @@ public class Get extends AbstractCommand {
 
   @Override
   public void run() {
-    executeContract(COMMAND_NAME, Json.createObjectBuilder().add("asset_id", assetId).build());
+    executeContract(toKey("get"), Json.createObjectBuilder().add("asset_id", assetId).build());
   }
 }

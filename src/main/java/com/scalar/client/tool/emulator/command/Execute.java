@@ -35,7 +35,7 @@ public class Execute extends AbstractCommand {
       paramLabel = "argument",
       description =
           "the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object")
-  private List<String> jsonOption;
+  private List<String> argument;
 
   @Inject
   public Execute(
@@ -48,9 +48,9 @@ public class Execute extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject json = convertJsonParameter(jsonOption);
+    JsonObject json = convertJsonParameter(argument);
     if (json != null) {
-      executeContract(id, json);
+      executeContract(toKey(id), json);
     }
   }
 }

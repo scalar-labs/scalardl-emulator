@@ -10,7 +10,7 @@ import javax.json.JsonObject;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    name = PutWithSingleParameter.COMMAND_NAME,
+    name = "put -j",
     sortOptions = false,
     usageHelpWidth = TerminalWrapper.USAGE_HELP_WIDTH,
     headerHeading = "%n@|bold,underline Usage|@:%n",
@@ -27,14 +27,13 @@ import picocli.CommandLine;
             + " {\"asset_id\":\"foo\",\"data\":{\"x\": \"y\"}}'%n")
 public class PutWithSingleParameter extends AbstractCommand {
   static final String COMMAND_NAME = "put -j";
-  public static final String CONTRACT_NAME = "put";
 
   @CommandLine.Parameters(
       arity = "1..*",
       paramLabel = "argument",
       description =
           "the JSON contract argument. A plain text JSON object or the path to a file containing a JSON object")
-  private List<String> jsonParameter;
+  private List<String> argument;
 
   @Inject
   public PutWithSingleParameter(
@@ -47,9 +46,9 @@ public class PutWithSingleParameter extends AbstractCommand {
 
   @Override
   public void run() {
-    JsonObject json = convertJsonParameter(this.jsonParameter);
+    JsonObject json = convertJsonParameter(argument);
     if (json != null) {
-      executeContract(CONTRACT_NAME, json);
+      executeContract(toKey("put"), json);
     }
   }
 }

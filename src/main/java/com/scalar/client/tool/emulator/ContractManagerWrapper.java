@@ -1,26 +1,21 @@
 package com.scalar.client.tool.emulator;
 
-import com.google.common.collect.ImmutableList;
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.contract.ContractEntry;
 import com.scalar.ledger.contract.ContractManager;
+import com.scalar.ledger.crypto.CertificateEntry;
 import com.scalar.ledger.exception.RegistryIOException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.json.JsonObject;
 
 public class ContractManagerWrapper {
   private ContractManager manager;
-  private final Set<String> contractIds;
 
   public ContractManagerWrapper(ContractManager manager) {
     this.manager = manager;
-    contractIds = new TreeSet<>();
   }
 
   public void register(String id, String name, File file, JsonObject properties) {
@@ -47,23 +42,18 @@ public class ContractManagerWrapper {
 
   public void register(ContractEntry entry) {
     manager.register(entry);
-    contractIds.add(entry.getId());
   }
 
-  public ContractEntry get(String id) {
-    return manager.get(id);
+  public ContractEntry get(ContractEntry.Key key) {
+    return manager.get(key);
   }
 
-  public Contract getInstance(String id) {
-    return manager.getInstance(id);
+  public Contract getInstance(ContractEntry.Key key) {
+    return manager.getInstance(key);
   }
 
-  public Optional<JsonObject> getProperties(String id) {
-    ContractEntry entry = manager.get(id);
-    return entry.getProperties();
-  }
-
-  public List<String> getContractIds() {
-    return ImmutableList.copyOf(contractIds);
+  public List<ContractEntry> scan() {
+    CertificateEntry.Key certKey = new CertificateEntry.Key("emulator_user", 0);
+    return manager.scan(certKey);
   }
 }
