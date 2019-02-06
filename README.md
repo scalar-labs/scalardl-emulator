@@ -1,6 +1,6 @@
 # Scalar DL Emulator
 
-Scalar DL Emulator is an interactive command line interface to run Scalar DL on a mutable in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
+Scalar DL Emulator is an interactive command line interface to run Scalar DL on a local mutable in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
 
 ## Run the tests and generate an executable
 
