@@ -46,11 +46,11 @@ public class ContractRegistryEmulator implements ContractRegistry {
   }
 
   @Override
-  public ContractEntry lookup(ContractEntry.Key key) {
-    if (contracts.containsKey(key.getId())) {
-      return contracts.get(key.getId());
+  public ContractEntry lookup(String id) {
+    if (contracts.containsKey(id)) {
+      return contracts.get(id);
     }
-    throw new MissingContractException("Contract " + key.getId() + " has not been registered");
+    throw new MissingContractException("Contract " + id + " has not been registered");
   }
 
   @Override

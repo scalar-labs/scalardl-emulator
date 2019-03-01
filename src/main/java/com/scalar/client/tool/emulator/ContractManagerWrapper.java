@@ -65,11 +65,11 @@ public class ContractManagerWrapper {
   }
 
   public ContractEntry get(ContractEntry.Key key) {
-    return manager.get(key);
+    return manager.get(key.getId());
   }
 
   public Contract getInstance(ContractEntry.Key key) {
-    return manager.getInstance(key);
+    return manager.getInstance(key.getId());
   }
 
   public List<ContractEntry> scan() {
