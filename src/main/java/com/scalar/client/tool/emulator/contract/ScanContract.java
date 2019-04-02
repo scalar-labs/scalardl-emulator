@@ -20,8 +20,6 @@
  */
 package com.scalar.client.tool.emulator.contract;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.scalar.ledger.contract.Contract;
 import com.scalar.ledger.database.AssetFilter;
 import com.scalar.ledger.database.AssetFilter.VersionOrder;
