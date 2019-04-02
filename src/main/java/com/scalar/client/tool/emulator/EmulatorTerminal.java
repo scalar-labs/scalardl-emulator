@@ -174,7 +174,7 @@ public class EmulatorTerminal implements Runnable {
     if (line.equals("help")) {
       printHelp();
       return true;
-    } else if (line.equals("exit")) {
+    } else if (line.equals("exit") || line.equals("quit")) {
       shouldExit = true;
       return true;
     } else {

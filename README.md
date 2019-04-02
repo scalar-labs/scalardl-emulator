@@ -2,10 +2,10 @@
 
 Scalar DL Emulator is an interactive command line interface to run Scalar DL on a local mutable in-memory ledger. The emulator may be used to quickly and easily test Scalar DL contracts. It does, however, lack any of the tamper-evident features found in the actual Scalar DL.
 
-## Run the tests and generate an executable
+## Generate an executable
 
-```
-./gradlew build install
+```bash
+./gradlew installDist
 ```
 
 The executable may be found in `build/install/emulator/bin`.
@@ -14,14 +14,14 @@ The executable may be found in `build/install/emulator/bin`.
 
 To run the emulator
 
-```
+```bash
 ./build/install/emulator/bin/emulator
 ```
 
 or pass a file with `-f` containing a list of commands the emulator will execute. For example,
 this will run the commands contained in [cmds.txt](https://github.com/scalar-labs/scalardl-emulator/blob/master/cmds.txt)
 
-```
+```bash
 ./build/install/emulator/bin/emulator -f cmds.txt
 ```
 

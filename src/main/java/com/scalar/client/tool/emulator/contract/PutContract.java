@@ -21,19 +21,16 @@
 package com.scalar.client.tool.emulator.contract;
 
 import com.scalar.ledger.contract.Contract;
+import com.scalar.ledger.exception.ContractContextException;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
-import javax.json.Json;
 import javax.json.JsonObject;
 
 public class PutContract extends Contract {
   @Override
   public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> property) {
-    if (!argument.containsKey("asset_id")) {
-      return Json.createObjectBuilder()
-          .add("result", "failure")
-          .add("message", "'asset_id' attribute is missing")
-          .build();
+    if (!(argument.containsKey("asset_id") && argument.containsKey("data"))) {
+      throw new ContractContextException("a required attribute is missing");
     }
 
     String assetId = argument.getString("asset_id");
