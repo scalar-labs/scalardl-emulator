@@ -21,9 +21,11 @@
 package com.scalar.client.tool.emulator.contract;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
+import com.scalar.ledger.exception.ContractContextException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
@@ -54,14 +56,12 @@ public class PutContractTest {
   }
 
   @Test
-  public void invoke_AssetIdNotGiven_ShouldResultInFailure() {
+  public void invoke_AssetIdNotGiven_ShouldThrowContractContextException() {
     // Arrange
     JsonObject argument = Json.createObjectBuilder().build();
 
-    // Act
-    JsonObject result = contract.invoke(ledger, argument, Optional.empty());
-
-    // Assert
-    assertThat(result.getString("result")).isEqualTo("failure");
+    // Act-assert
+    assertThatThrownBy(() -> contract.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(ContractContextException.class);
   }
 }

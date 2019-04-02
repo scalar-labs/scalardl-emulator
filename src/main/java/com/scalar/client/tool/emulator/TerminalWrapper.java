@@ -61,7 +61,7 @@ public class TerminalWrapper {
   }
 
   public void printWelcomeMessage() {
-    println("Scalar DL emulator");
+    println("Scalar DL Emulator");
     println("Type 'help' for more information");
   }
 

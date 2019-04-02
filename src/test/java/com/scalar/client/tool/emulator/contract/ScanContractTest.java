@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.scalar.ledger.database.TransactionalAssetbase;
 import com.scalar.ledger.emulator.AssetbaseEmulator;
+import com.scalar.ledger.exception.ContractContextException;
 import com.scalar.ledger.ledger.AssetLedger;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
@@ -89,16 +90,13 @@ public class ScanContractTest {
   }
 
   @Test
-  public void run_AssetIdNotGiven_ShouldFailProperly() {
+  public void run_AssetIdNotGiven_ShouldThrowContractContextException() {
     // Arrange
     JsonObject argument = Json.createObjectBuilder().build();
 
     // Act
-    JsonObject result = scan.invoke(ledger, argument, Optional.empty());
-
-    // Assert
-    assertThat(result.getString("result")).isEqualTo("failure");
-    assertThat(result.getString("message")).isEqualTo("'asset_id' attribute is missing");
+    assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
+        .isInstanceOf(ContractContextException.class);
   }
 
   @Test
@@ -132,14 +130,14 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenNegativeStartVersionTooLarge_ShouldResultInIllegalArgumentException() {
+  public void invoke_GivenNegativeStartVersion_ShouldThrowContractContextException() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("start", -2).build();
 
     // Act-assert
     assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
-        .isInstanceOf(IllegalArgumentException.class);
+        .isInstanceOf(ContractContextException.class);
   }
 
   @Test
@@ -170,14 +168,14 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenNegativeEndVersionTooLarge_ShouldResultInIllegalArgumentException() {
+  public void invoke_GivenNegativeEndVersion_ShouldThrowContractContextException() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("end", -2).build();
 
     // Act-assert
     assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
-        .isInstanceOf(IllegalArgumentException.class);
+        .isInstanceOf(ContractContextException.class);
   }
 
   @Test
@@ -224,14 +222,14 @@ public class ScanContractTest {
   }
 
   @Test
-  public void invoke_GivenNegativeLimit_ShouldResultInFailure() {
+  public void invoke_GivenNegativeLimit_ShouldThrowContractContextException() {
     // Arrange
     JsonObject argument =
         Json.createObjectBuilder().add("asset_id", ASSET_ID).add("limit", -5).build();
 
     // Act-assert
     assertThatThrownBy(() -> scan.invoke(ledger, argument, Optional.empty()))
-        .isInstanceOf(IllegalArgumentException.class);
+        .isInstanceOf(ContractContextException.class);
   }
 
   @Test

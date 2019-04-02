@@ -22,6 +22,7 @@ package com.scalar.client.tool.emulator.contract;
 
 import com.scalar.ledger.asset.Asset;
 import com.scalar.ledger.contract.Contract;
+import com.scalar.ledger.exception.ContractContextException;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
 import javax.json.Json;
@@ -32,10 +33,7 @@ public class GetContract extends Contract {
   public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> property) {
 
     if (!argument.containsKey("asset_id")) {
-      return Json.createObjectBuilder()
-          .add("result", "failure")
-          .add("message", "'asset_id' attribute is missing")
-          .build();
+      throw new ContractContextException("asset_id attribute is missing");
     }
 
     String assetId = argument.getString("asset_id");

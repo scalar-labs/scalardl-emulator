@@ -22,6 +22,7 @@ package com.scalar.client.tool.emulator.contract;
 
 import com.scalar.ledger.asset.Asset;
 import com.scalar.ledger.contract.Contract;
+import com.scalar.ledger.exception.ContractContextException;
 import com.scalar.ledger.ledger.Ledger;
 import java.util.Optional;
 import javax.json.Json;
@@ -31,6 +32,10 @@ public class StateUpdater extends Contract {
 
   @Override
   public JsonObject invoke(Ledger ledger, JsonObject argument, Optional<JsonObject> properties) {
+    if (!(argument.containsKey("asset_id") && argument.containsKey("state"))) {
+      throw new ContractContextException("a required attribute is missing");
+    }
+
     String assetId = argument.getString("asset_id");
     int state = argument.getInt("state");
 
